@@ -56,10 +56,10 @@ cone {
 	}
 }
 
-torus{
+torus{ //like a doughnut
 	4 //outer radius
 	1 //inner radius
-	translate<0,.5,0> //a way to position difficult things
+	translate<0,.5,0> //a way to position difficult things, must state location below radii
 	texture{
 		pigment{
 			rgb<1,0,0>

@@ -2,7 +2,7 @@
 
 //Scene Setup:
 background {
-	rgb <0,0,0>
+	rgb <.2,.1,.2>
 }
 
 camera {
@@ -10,21 +10,66 @@ camera {
 	look_at <0,0,0>
 }
 
-light_source{
-	<4,3,4>
+#declare SpotLight = light_source{
+	<10,10,10>
 	rgb <1,1,1>
-}
+	spotlight
+	point_at <0,2,0>
+	radius 15
+	falloff 30
+	tightness 15
+};
+
+#declare AreaLight = light_source {
+	<20,20,-20>
+	rgb <1,1,1>
+	area_light
+	<1,0,1>, <0,1,1>, 4,4 //4*4 = number of lights in the scene
+};
+
+#declare RimLight = light_source{
+	<0,10,10>
+	rgb <1,1,1> * .8
+	spotlight
+	radius 10
+	falloff 30
+	point_at <0,3,0>
+	rotate <0,200,0>
+	rotate <25,0,0>
+	shadowless
+};
+
+#declare KeyLightIntensity = .8;
+#declare KeyLight = light_source {
+	<0,8,-13>
+	rgb<1,1,1> * KeyLightIntensity
+	rotate <15,-45,0>
+};
+
+#declare FillLight = light_source{
+	<0,4,10> //should be on other side
+	rgb <.7,1,1> * KeyLightIntensity * .5 //half as strong as key light - tint to scene
+	spotlight //most are
+	radius 10
+	falloff 20
+	rotate <0,-25,0>
+	shadowless
+};
+
+light_source {RimLight}
+light_source {FillLight}
+light_source {KeyLight}
 
 //Colors:
 #declare ChessLightColor = texture {
 	pigment{
-		rgb <.9,.9,.9>
+		rgb <.2,.1,.2>
 	}
 };
 
 #declare ChessDarkColor = texture {
 	pigment{
-		rgb <0,0,0>
+		rgb <.5,.5,.5>
 	}
 };
 
@@ -123,3 +168,13 @@ light_source{
 	}
 	translate<0,3,0>
 };
+
+object {
+	ChessPiece
+}
+plane{
+	<0,1,0>
+	0
+	translate<0,-5,0>
+	texture{ChessDarkColor}
+}

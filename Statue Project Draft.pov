@@ -31,23 +31,7 @@
 	1.1 //radius of the sphere
 }
 
-
-background {
-	rgb <0,0,0>
-}
-
-camera {
-	location <0,0,-12>
-	look_at <0,0,0>
-}
-
-light_source{
-	<0,1,-5>
-	rgb <1,1,1>
-}
-
-
-union {
+#declare LightBulb = merge {
 	object{ //ring 2 from top
 		BulbTorus
 		scale <0,.5,0>
@@ -82,6 +66,22 @@ union {
 		texture {BulbColor}
 	}
 	translate <0,1,0>
+};
+
+
+background {
+	rgb <0,0,0>
 }
-	
-	
+
+camera {
+	location <0,0,-12>
+	look_at <0,0,0>
+}
+
+light_source{
+	<0,2,0>
+	rgb <1,1,1>
+	looks_like {LightBulb}
+}
+
+

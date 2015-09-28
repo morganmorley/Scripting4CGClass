@@ -12,39 +12,6 @@ camera {
 	look_at <0,0,.5>
 }
 
-#declare KeyLightIntensity = .8;
-#declare KeyLight = light_source {
-	<0,8,-13>
-	rgb<1,1,1> * KeyLightIntensity
-	rotate <15,-45,0>
-};
-
-#declare RimLight = light_source{
-	<0,10,10>
-	rgb <1,1,1> * KeyLightIntensity
-	spotlight
-	radius 10
-	falloff 30
-	point_at <0,3,0>
-	rotate <0,200,0>
-	rotate <25,0,0>
-	shadowless
-};
-
-#declare FillLight = light_source{
-	<0,4,10> //should be on other side
-	rgb <.7,1,1> * KeyLightIntensity * .5 //half as strong as key light - tint to scene
-	spotlight //most are
-	radius 10
-	falloff 20
-	rotate <0,-25,0>
-	shadowless
-};
-
-light_source {FillLight}
-light_source {RimLight}
-light_source {KeyLight}
-
 //Colors:
 #declare TableLightColor = texture {
 	pigment{
@@ -255,6 +222,51 @@ difference {
 
 object {ChessPiece}
 
+
+#declare KeyLightIntensity = .8;
+#declare KeyLight = light_source {
+	<0,8,-13>
+	rgb<1,1,1> * KeyLightIntensity
+	rotate <15,-45,0>
+};
+
+#declare RimLight = light_source{
+	<0,10,10>
+	rgb <1,1,1> * KeyLightIntensity *.5
+	spotlight
+	radius 10
+	falloff 30
+	point_at <0,3,0>
+	rotate <0,200,0>
+	rotate <25,0,0>
+};
+
+#declare RimLightShadowFill = light_source { //removed annoying chess piece shadow
+	<0,10,10>
+	rgb <1,1,1> * KeyLightIntensity *.7
+	spotlight
+	radius 10
+	falloff 30
+	point_at <0,3,0>
+	rotate <0,200,0>
+	rotate <25,0,0>
+	projected_through {ChessPiece}
+};
+
+#declare FillLight = light_source{
+	<0,4,10> //should be on other side
+	rgb <.7,1,1> * KeyLightIntensity * .5 //half as strong as key light - tint to scene
+	spotlight //most are
+	radius 10
+	falloff 20
+	rotate <0,-25,0>
+	shadowless
+};
+
+light_source {FillLight}
+light_source {RimLight}
+light_source {RimLightShadowFill}
+light_source {KeyLight}
 
 		
 

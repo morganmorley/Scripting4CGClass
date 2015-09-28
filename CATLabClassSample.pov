@@ -145,11 +145,6 @@ camera {
 	look_at MargaretVision
 }
 
-light_source {
-	<HalfRoomWidth,SeatedEyeHeight,HalfRoomLength>
-	rgb <1,1,1>
-}
-
 background {
 	rgb <.5,.5,1> //need to have a background color that isn't black for TopDividers to show up
 }		
@@ -175,6 +170,30 @@ difference {
 	}
 }
 
+//Lighting:
+light_source {
+	<HalfRoomWidth,SeatedEyeHeight,HalfRoomLength>
+	rgb <1,1,1>
+}
+#declare Sunlight = light_source {
+	rgb<.75,.75.68>
+	parallel
+	//point_at
+};
+#declare SkylightPointAts = array[4] {<0,RoomHeight*.5,RoomLength*.5>,<RoomWidth*.25,RoomHeight*.5,RoomLength*.5>,<RoomWidth*.5,RoomHeight*.5,RoomLength*.5>,<RoomWidth*.75,RoomHeight*.5,RoomLength*.5>}
+#declare Skylights = union {
+	#declare Index = 0;
+	#while (Index < 4) 
+		light_source {
+				rgb <.68,.68,.75> *3
+				spotlight
+				point_at SkylightPointAts[Index]
+				radius = 0
+				falloff = 40
+		}
+		Index = Index + 1;
+		#end
+};
 
 //Window
 #declare Black = texture{pigment{rgb <0,0,0>}};

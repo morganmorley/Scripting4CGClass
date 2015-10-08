@@ -1,5 +1,6 @@
 //October 5, 2015
 
+#include "textures.inc"
 
 #declare feet = 12;
 
@@ -9,9 +10,14 @@
 		rgb <1,1,1>
 	}
 };
-#declare WallColor = texture {
+#declare WallColor = texture { //will be wood?
 	pigment {
 		rgb <.3,.2,.2>
+	}
+};
+#declare WindowGlassColor = texture { //will be transparent and glass-like
+	pigment {
+		rgb <1,1,1>
 	}
 };
 
@@ -21,7 +27,7 @@
 #declare RoomWidth = 15 * feet;
 #declare RoomHeight = 15 * feet;
 #declare DoorDepth = 2;
-#declare DoorWidth = .2 * RoomWidth;
+#declare DoorWidth = /*.2 * RoomWidth;*/ RoomWidth;
 #declare DoorHeight = 8 * feet;
 #declare TotalWindowLength = (2/3) * RoomLength;
 #declare FlatCeilingLength = (1/3) * RoomLength;
@@ -90,22 +96,36 @@
 		rotate WindowRotation
 		translate <0,0,-(TotalWindowLength/2)+(WindowLength/2)+(WindowFrameWidthLength*3)+(WindowLength*2)>
 	}
-	translate <RoomWidth/4,RoomHeight+(RoomWidth/4)-DoorDepth,(TotalWindowLength/2)+FlatCeilingLength>
+	texture {WallColor}
 };
-#declare AngledCeiling = box {
-	<-(WindowHypotenuse/2),-(DoorDepth/2),-(TotalWindowLength/2)>
-	<WindowHypotenuse/2,DoorDepth/2,(TotalWindowLength/2)>
-	rotate -(WindowRotation)
-	translate<RoomWidth/4*3,RoomHeight+(RoomWidth/4)-DoorDepth,(TotalWindowLength/2)+FlatCeilingLength>
-};
-#declare WindowsAndCeiling = union {
+#declare WindowsAndGlass = union {
 	object {
 		Windows
 	}
-	object {
-		AngledCeiling
+		object {
+		WindowCutout
+		scale <0,.25,0>
+		rotate WindowRotation
+		translate <0,0,-(TotalWindowLength/2)+(WindowLength/2)+WindowFrameWidthLength>
+		texture {WindowGlassColor}
 	}
+	object {
+		WindowCutout
+		scale <0,.25,0>
+		rotate WindowRotation
+		translate <0,0,-(TotalWindowLength/2)+(WindowLength/2)+(WindowFrameWidthLength*2)+WindowLength>
+		texture {WindowGlassColor}
+	}
+	object {
+		WindowCutout
+		scale <0,.25,0>
+		rotate WindowRotation
+		translate <0,0,-(TotalWindowLength/2)+(WindowLength/2)+(WindowFrameWidthLength*3)+(WindowLength*2)>
+		texture {WindowGlassColor}
+	}
+	translate <RoomWidth/4,RoomHeight+(RoomWidth/4)-DoorDepth,(TotalWindowLength/2)+FlatCeilingLength>
 };
+
 #declare SolidWall = box {
 	<0,0,-DoorDepth>
 	<RoomWidth,RoomWidth,DoorDepth>
@@ -141,9 +161,15 @@
 	}
 	translate <0,0,-DoorDepth>
 };
-#declare WindowsCeilingAndWall = union {
+#declare AngledCeiling = box {
+	<-(WindowHypotenuse/2),-(DoorDepth/2),-(TotalWindowLength/2)>
+	<WindowHypotenuse/2,DoorDepth/2,(TotalWindowLength/2)>
+	rotate -(WindowRotation)
+	translate<RoomWidth/4*3,RoomHeight+(RoomWidth/4)-DoorDepth,(TotalWindowLength/2)+FlatCeilingLength>
+};
+#declare CeilingAndWalls = union {
 	object {
-		WindowsAndCeiling
+		AngledCeiling
 	}
 	object {
 		TriangleWall2
@@ -154,6 +180,14 @@
 	}
 	texture {WallColor}
 };
+#declare VaultedCeiling = union {
+	object {
+		CeilingAndWalls
+	}
+	object {
+		WindowsAndGlass
+	}
+};
 
 //Total Room:
 #declare Room = union { 
@@ -161,13 +195,14 @@
 		BasicRoom
 	}
 	object {
-		WindowsCeilingAndWall
+		VaultedCeiling
 	}
 };	
 
 //Setup:
 #declare InsideLookingUp = <RoomWidth/2,0,RoomLength/4*3>;
-#declare CamOutside = <RoomWidth/2,RoomHeight,.5*RoomLength>;
+#declare MiddleInside = <RoomWidth/2,RoomHeight,.5*RoomLength>;
+#declare CamOutside = <-2*RoomWidth, RoomHeight/2,.5*RoomLength>;
 
 light_source {
 	<5,5,5>
@@ -177,8 +212,8 @@ background {
 	rgb <0,1,1>
 }
 camera {
-	location CamOutside
-	look_at <RoomWidth/2,RoomHeight,RoomLength>
+	location MiddleInside
+	look_at <.5*RoomWidth,RoomHeight,RoomLength>
 }
 light_source {
 	CamOutside
@@ -187,5 +222,23 @@ light_source {
 object {
 	Room
 }
+
+/*
+Next Goals:
+	Make Log Cabin Walls (cylinders with wood texture)
+	Make Transparent Glass for Windows
+	Do Sunlight and Skylights and BounceLights
+	Add in Fireplace and raised floor
+	Look at atmospheric effects
+	
+*/
+
+
+
+
+
+
+
+
 
 

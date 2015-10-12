@@ -12,8 +12,8 @@ camera {
 #declare KeyLightIntensity = .8;
 
 #declare RimLight = light_source {
-	<-5,15,15>
-	rgb<1,1,1> * KeyLightIntensity
+	<-15,15,15>
+	rgb<.9,.9,1> * KeyLightIntensity
 	spotlight
 	radius 10
 	falloff 30
@@ -30,7 +30,7 @@ camera {
 
 #declare FillLight = light_source{
 	<10,9,-15> //should be on other side
-	rgb <.7,1,1> * KeyLightIntensity * .5 
+	rgb<1,1,.9> * KeyLightIntensity * .5
 	spotlight
 	radius 10
 	falloff 20

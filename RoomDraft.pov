@@ -24,57 +24,184 @@
 
 //Basic Walls:
 #declare RoomLength = 30 * feet;
+#declare HalfRoomLength = RoomLength/2;
 #declare RoomWidth = 15 * feet;
+#declare HalfRoomWidth = RoomWidth/2;
 #declare RoomHeight = 15 * feet;
-#declare DoorDepth = 2;
-#declare DoorWidth = /*.2 * RoomWidth;*/ RoomWidth;
+#declare HalfRoomHeight = RoomHeight/2;
+#declare DoorWidth = .2 * RoomWidth;
+#declare HalfDoorWidth = DoorWidth/2;
 #declare DoorHeight = 8 * feet;
+#declare LogRadius = RoomHeight/30;
+#declare WallDepth = LogRadius * 2;
+#declare NumberLogsOnWall = RoomHeight/WallDepth;
 #declare TotalWindowLength = (2/3) * RoomLength;
 #declare FlatCeilingLength = (1/3) * RoomLength;
-#declare RoomWalls = box {
-	<0,0,0>
-	<RoomWidth,RoomHeight,RoomLength>
+#declare WindowRotation = <0,0,45>;
+#declare TriangleWallHeight = RoomHeight/2;
+#declare WindowFrameWidthLength = 8;
+#declare WindowHypotenuse = (RoomWidth*sqrt(2))/2;
+#declare WindowLength = ((TotalWindowLength-WindowFrameWidthLength)/3)-WindowFrameWidthLength;
+
+
+//North Wall
+
+#declare SingleLogNorthSouth = cylinder {
+	<-HalfRoomWidth,0,0>
+	<HalfRoomWidth,0,0>
+	LogRadius
 };
-#declare CeilingCutout = box {
-	<-(RoomWidth/2+4),-(DoorDepth/2),-(TotalWindowLength/2)>
-	<RoomWidth/2,DoorDepth/2,TotalWindowLength/2>
+#declare Index = 0;
+#declare BasicNorthWall = union {
+	#while (Index < NumberLogsOnWall)
+		object {
+			SingleLogNorthSouth
+			translate <RoomWidth/2,(RoomHeight/NumberLogsOnWall)*Index,RoomLength>
+		}
+		#declare Index = Index + 1;
+		#end
 };
-#declare DoorCutout = box {
-	<0,0,-DoorDepth>
-	<DoorWidth,DoorHeight,DoorDepth>
+#declare Index = 0;
+#declare SolidWall = union {
+	#while (Index < ((NumberLogsOnWall/2)+1))
+		object {
+			SingleLogNorthSouth
+			translate <0,(RoomHeight/20)*Index,0>
+		}
+		#declare Index = Index + 1;
+		#end
 };
-#declare BasicRoom = difference {
+#declare Index = 0;
+#declare DifferenceWall1 = box {
+	<-HalfRoomWidth,-TriangleWallHeight/2,-LogRadius>
+	<HalfRoomWidth,TriangleWallHeight/2,LogRadius>
+	translate <0,-(TriangleWallHeight/2),0>
+	rotate WindowRotation
+};
+#declare Index = 0;
+#declare DifferenceWall2 = box {
+	<-HalfRoomWidth,-TriangleWallHeight/2,-LogRadius>
+	<HalfRoomWidth,TriangleWallHeight/2,LogRadius>
+	translate <0,-(TriangleWallHeight/2),0>
+	rotate -WindowRotation
+};
+
+#declare TriangleWallNorth = difference {
 	object {
-		RoomWalls
-		scale 1.001 
+		SolidWall
+		translate <RoomWidth/2,RoomHeight,RoomLength>
 	}
 	object {
-		RoomWalls
+		DifferenceWall1
+		translate <-HalfRoomWidth/4,TriangleWallHeight+RoomHeight,RoomLength>
 	}
 	object {
-		CeilingCutout
-		translate <RoomWidth/2,RoomHeight,(TotalWindowLength/2)+FlatCeilingLength>
+		DifferenceWall2
+		translate <RoomWidth+HalfRoomWidth/4,TriangleWallHeight+RoomHeight,RoomLength>
+	}
+};
+#declare NorthWall = union {
+	object {
+		BasicNorthWall
 	}
 	object {
-		DoorCutout
-		translate <0,0,-DoorDepth>
+		TriangleWallNorth
 	}
 	texture {WallColor}
 };
 
+//Middle Triangle Wall:
 
-//Windows And Ceiling
+#declare TriangleWallMiddle = difference {
+	object {
+		SolidWall
+		translate <RoomWidth/2,RoomHeight,FlatCeilingLength>
+	}
+	object {
+		DifferenceWall1
+		translate <-HalfRoomWidth/4,TriangleWallHeight+RoomHeight,FlatCeilingLength>
+	}
+	object {
+		DifferenceWall2
+		translate <RoomWidth+HalfRoomWidth/4,TriangleWallHeight+RoomHeight,FlatCeilingLength>
+	}
+	texture {WallColor}
+};
+
+//South Wall
+
+#declare Index = 0;
+#declare SouthWall = union {
+	#while (Index < NumberLogsOnWall)
+		object {
+			SingleLogNorthSouth
+			translate <RoomWidth/2,(RoomHeight/NumberLogsOnWall)*Index,0>
+		}
+		#declare Index = Index + 1;
+		#end
+	texture {WallColor}
+};
+
+//East Wall
+
+#declare SingleLogEastWest = cylinder {
+	<0,0,-HalfRoomLength>
+	<0,0,HalfRoomLength>
+	LogRadius
+};
+#declare Index = 0;
+#declare EastWall = union {
+	#while (Index < NumberLogsOnWall)
+		object {
+			SingleLogEastWest
+			translate <RoomWidth,(RoomHeight/NumberLogsOnWall)*Index,RoomLength/2>
+		}
+		#declare Index = Index + 1;
+		#end
+	texture {WallColor}
+};
+
+//West Wall
+
+#declare SingleLogEastWest = cylinder {
+	<0,0,-HalfRoomLength>
+	<0,0,HalfRoomLength>
+	LogRadius
+};
+#declare Index = 0;
+#declare WestWall = union {
+	#while (Index < NumberLogsOnWall)
+		object {
+			SingleLogEastWest
+			translate <0,(RoomHeight/NumberLogsOnWall)*Index,RoomLength/2>
+		}
+		#declare Index = Index + 1;
+		#end
+		texture {WallColor}
+};
+
+//Floor
+
+#declare Floor = box {
+	<-HalfRoomWidth,-LogRadius,-HalfRoomLength>
+	<HalfRoomWidth,LogRadius,HalfRoomLength>
+	translate <HalfRoomWidth,0,HalfRoomLength>
+	texture {WallColor}
+};
+
+
+//Windows
 #declare WindowRotation = <0,0,45>;
 #declare WindowFrameWidthLength = 8;
 #declare WindowHypotenuse = (RoomWidth*sqrt(2))/2;
 #declare WindowLength = ((TotalWindowLength-WindowFrameWidthLength)/3)-WindowFrameWidthLength;
 #declare WindowBox = box {
-	<-(WindowHypotenuse/2),-(DoorDepth/2),-(TotalWindowLength/2)>
-	<WindowHypotenuse/2,DoorDepth/2,(TotalWindowLength/2)>
+	<-(WindowHypotenuse/2),-(WallDepth/2),-(TotalWindowLength/2)>
+	<WindowHypotenuse/2,WallDepth/2,(TotalWindowLength/2)>
 };
 #declare WindowCutout = box {
-	<-(WindowHypotenuse/2)+WindowFrameWidthLength,-DoorDepth,-(WindowLength/2)>
-	<WindowHypotenuse/2-WindowFrameWidthLength,DoorDepth,WindowLength/2>
+	<-(WindowHypotenuse/2)+WindowFrameWidthLength,-WallDepth,-(WindowLength/2)>
+	<WindowHypotenuse/2-WindowFrameWidthLength,WallDepth,WindowLength/2>
 };
 #declare Windows = difference {
 	object {
@@ -123,97 +250,73 @@
 		translate <0,0,-(TotalWindowLength/2)+(WindowLength/2)+(WindowFrameWidthLength*3)+(WindowLength*2)>
 		texture {WindowGlassColor}
 	}
-	translate <RoomWidth/4,RoomHeight+(RoomWidth/4)-DoorDepth,(TotalWindowLength/2)+FlatCeilingLength>
+	translate <(RoomWidth/4),RoomHeight+(RoomWidth/4)-LogRadius,(TotalWindowLength/2)+FlatCeilingLength>
 };
 
-#declare SolidWall = box {
-	<0,0,-DoorDepth>
-	<RoomWidth,RoomWidth,DoorDepth>
-	translate <0,RoomHeight,RoomLength-TotalWindowLength>
-};
-#declare DifferenceWall = box {
-	<-WindowHypotenuse,-WindowHypotenuse,-DoorDepth>
-	<WindowHypotenuse,WindowHypotenuse,DoorDepth>
-};
-#declare TriangleWall1 = difference {
-	object {
-		SolidWall
-	}
-	object {
-		DifferenceWall
-		rotate WindowRotation
-		translate <0,RoomHeight+RoomWidth,RoomLength-TotalWindowLength>
-	}
-	object {
-		DifferenceWall
-		rotate -WindowRotation
-		translate <RoomWidth,RoomHeight+RoomWidth,RoomLength-TotalWindowLength>
-	}
-};	
-#declare TriangleWall2 = difference {
-	object {
-		TriangleWall1
-	}
-	object {
-		DifferenceWall
-		rotate WindowRotation
-		translate <RoomWidth/2,RoomHeight+(RoomWidth/2),RoomLength-TotalWindowLength>
-	}
-	translate <0,0,-DoorDepth>
-};
-#declare AngledCeiling = box {
-	<-(WindowHypotenuse/2),-(DoorDepth/2),-(TotalWindowLength/2)>
-	<WindowHypotenuse/2,DoorDepth/2,(TotalWindowLength/2)>
-	rotate -(WindowRotation)
-	translate<RoomWidth/4*3,RoomHeight+(RoomWidth/4)-DoorDepth,(TotalWindowLength/2)+FlatCeilingLength>
-};
-#declare CeilingAndWalls = union {
-	object {
-		AngledCeiling
-	}
-	object {
-		TriangleWall2
-	}
-	object {
-		TriangleWall2
-		translate <0,0,TotalWindowLength+DoorDepth*2>
-	}
+//Ceiling
+
+#declare FlatCeiling = box {
+	<-HalfRoomWidth,-LogRadius,-FlatCeilingLength/2>
+	<HalfRoomWidth,LogRadius,FlatCeilingLength/2>
+	translate <HalfRoomWidth,RoomHeight,FlatCeilingLength/2>
 	texture {WallColor}
 };
-#declare VaultedCeiling = union {
-	object {
-		CeilingAndWalls
-	}
-	object {
-		WindowsAndGlass
-	}
+
+#declare AngledCeiling = box {
+	<-(WindowHypotenuse/2),-LogRadius,-(TotalWindowLength/2)>
+	<WindowHypotenuse/2,LogRadius,(TotalWindowLength/2)>
+	rotate -(WindowRotation)
+	translate <(RoomWidth/4)*3,RoomHeight+(RoomWidth/4)-LogRadius,(TotalWindowLength/2)+FlatCeilingLength>
+	texture {WallColor}
 };
 
 //Total Room:
 #declare Room = union { 
 	object {
-		BasicRoom
+		NorthWall
 	}
 	object {
-		VaultedCeiling
+		SouthWall
+	}
+	object {
+		TriangleWallMiddle
+	}
+	object {
+		EastWall
+	}
+	object {
+		WestWall
+	}
+	object {
+		Floor
+	}
+	object {
+		WindowsAndGlass
+	}
+	object {
+		FlatCeiling
+	}
+	object {
+		AngledCeiling
 	}
 };	
 
 //Setup:
-#declare InsideLookingUp = <RoomWidth/2,0,RoomLength/4*3>;
+#declare InsideLookingUp = <RoomWidth/2,20,RoomLength/4*3>;
 #declare MiddleInside = <RoomWidth/2,RoomHeight,.5*RoomLength>;
 #declare CamOutside = <-2*RoomWidth, RoomHeight/2,.5*RoomLength>;
+#declare BackOfRoom = <.5*RoomWidth,RoomHeight,RoomLength-20>;
 
 light_source {
-	<5,5,5>
+	<HalfRoomWidth,HalfRoomHeight,HalfRoomLength>
 	rgb <1,1,1>
 }
 background {
 	rgb <0,1,1>
 }
 camera {
-	location MiddleInside
-	look_at <.5*RoomWidth,RoomHeight,RoomLength>
+	location InsideLookingUp
+	look_at MiddleInside
 }
 light_source {
 	CamOutside

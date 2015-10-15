@@ -1,6 +1,7 @@
 //October 5, 2015
 
 #include "textures.inc"
+#include "colors.inc"
 
 #declare feet = 12;
 
@@ -10,9 +11,33 @@
 		rgb <1,1,1>
 	}
 };
+#declare WoodMap = color_map {
+	[0.0 color DarkTan *.2]
+	[0.8 color DarkBrown * .5]
+	//[1 color VeryDarkBrown * .3]
+};
+#declare WoodPigment = pigment {
+	agate //banded pattern
+	agate_turb 2
+	color_map {WoodMap} 
+	scale .5
+};
+
 #declare WallColor = texture { //will be wood?
+	pigment {WoodPigment}
+	normal {
+		bump_map {
+			jpeg "Wood_Normal.jpg"
+			bump_size 2
+		}
+		scale 100
+	}
+};
+
+#declare CeilingColor = texture {
 	pigment {
-		rgb <.3,.2,.2>
+		image_map {jpeg "DarkWood_Seamless.jpg"}
+		scale 40
 	}
 };
 #declare WindowGlassColor = texture { //will be transparent and glass-like
@@ -163,11 +188,6 @@
 
 //West Wall
 
-#declare SingleLogEastWest = cylinder {
-	<0,0,-HalfRoomLength>
-	<0,0,HalfRoomLength>
-	LogRadius
-};
 #declare Index = 0;
 #declare WestWall = union {
 	#while (Index < NumberLogsOnWall)
@@ -315,8 +335,9 @@ background {
 	rgb <0,1,1>
 }
 camera {
-	location InsideLookingUp
-	look_at MiddleInside
+	location MiddleInside
+	look_at BackOfRoom
+	angle 90
 }
 light_source {
 	CamOutside

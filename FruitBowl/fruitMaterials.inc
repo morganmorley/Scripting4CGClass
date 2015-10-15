@@ -1,3 +1,5 @@
+#include "colors.inc"
+
 //==================================================
 //Material definitions
 #declare Cherries1_MappedPigment = pigment { color rgb <1,0,0> };

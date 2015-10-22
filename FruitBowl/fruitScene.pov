@@ -9,7 +9,7 @@ camera {
 
 // Add Lights Here!
 
-#declare KeyLightIntensity = .8;
+#declare KeyLightIntensity = .6;
 
 #declare RimLight = light_source {
 	<-15,15,15>

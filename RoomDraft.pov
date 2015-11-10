@@ -12,9 +12,10 @@
 	}
 };
 #declare WoodMap = color_map {
-	[0.0 color DarkTan *.2]
+	[0.0 color Tan * .1]
+	[0.6 color DarkTan *.2]
 	[0.8 color DarkBrown * .5]
-	//[1 color VeryDarkBrown * .3]
+	[1 color Black * .3]
 };
 #declare WoodPigment = pigment {
 	agate //banded pattern
@@ -24,13 +25,13 @@
 };
 
 #declare WallColor = texture { //will be wood?
-	pigment {WoodPigment}
+  pigment {WoodPigment} 
 	normal {
 		bump_map {
 			jpeg "Wood_Normal.jpg"
 			bump_size 2
 		}
-		scale 100
+	//	scale 100
 	}
 };
 
@@ -326,6 +327,7 @@
 #declare MiddleInside = <RoomWidth/2,RoomHeight,.5*RoomLength>;
 #declare CamOutside = <-2*RoomWidth, RoomHeight/2,.5*RoomLength>;
 #declare BackOfRoom = <.5*RoomWidth,RoomHeight,RoomLength-20>;
+#declare SideOfRoom = <RoomWidth,RoomHeight,RoomLength/2>;
 
 light_source {
 	<HalfRoomWidth,HalfRoomHeight,HalfRoomLength>

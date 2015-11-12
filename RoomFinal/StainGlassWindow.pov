@@ -129,33 +129,33 @@ light_source {
 //FlowerCenter
 #declare FlowerCenterHeight = 2 * Scaler;
 #declare FlowerRadius = FlowerCenterHeight/2;
-#declare LittleRadius = FlowerRadius/3;
+#declare MidRadius = FlowerRadius * 7/8;
+#declare LittleRadius = FlowerRadius/2;
 
-#declare Index = 0;
-#declare CenterTopCircleX = 0;
-#declare CenterTopCircleZ = (2*LittleRadius);
-#declare MidCurves = LittleRadius/sqrt(2);
+#declare RotateX = function(length,theta) { -length * sin(radians(theta)) };
+#declare RotateY = function(length,theta) { length * cos(radians(theta)) };
 
+#declare NumSlices = 6;
+#declare SliceAngle = 360/(NumSlices);
 
 #declare FlowerCenter = prism {
     cubic_spline
     0, // Y min
     1, // Y max CHANGE
-    45, // the number of points making up the shape ...
-		#while (Index < 6)
-			vrotate(<-MidCurves,-MidCurves>,<-90,60*Index>), //45SW
-			vrotate(<CenterTopCircleX-LittleRadius,CenterTopCircleZ>,<-90,60*Index>), //West
-			vrotate(<-MidCurves,MidCurves>,<-90,60*Index>), //45NW
-			vrotate(<CenterTopCircleX,CenterTopCircleZ+LittleRadius>,<-90,60*Index>), //North
-			vrotate(<MidCurves,MidCurves>,<-90,60*Index>), //45NE
-			vrotate(<CenterTopCircleX+LittleRadius,CenterTopCircleZ>,<-90,60*Index>), //East
-			vrotate(<MidCurves,-MidCurves>,<-90,60*Index>), //45SE
-			#declare Index = Index + 1;
+    4 * NumSlices + 3, // the number of points making up the shape ...
+    		#declare Degrees = 0;
+		#while (Degrees < 360)
+			<RotateX(FlowerRadius,Degrees), RotateY(FlowerRadius,Degrees)>
+			<RotateX(MidRadius,Degrees + SliceAngle/4), RotateY(MidRadius,Degrees + SliceAngle/4)>
+			<RotateX(LittleRadius,Degrees + SliceAngle/2), RotateY(LittleRadius,Degrees + SliceAngle/2)>
+			<RotateX(MidRadius,Degrees + SliceAngle*3/4), RotateY(MidRadius,Degrees + SliceAngle*3/4)>
+			#declare Degrees = Degrees + SliceAngle;
 		#end
-		<-MidCurves,-MidCurves>, //45SW
-		<CenterTopCircleX-LittleRadius,CenterTopCircleZ>, //West
-		<-MidCurves,MidCurves> //45NW End
-    texture { pigment { rgb <0,1,0> }}
+		//Closing it off
+		<RotateX(FlowerRadius,Degrees), RotateY(FlowerRadius,Degrees)>
+		<RotateX(MidRadius,Degrees + SliceAngle/4), RotateY(MidRadius,Degrees + SliceAngle/4)>
+		<RotateX(LittleRadius,Degrees + SliceAngle/2), RotateY(LittleRadius,Degrees + SliceAngle/2)>
+		texture { pigment { rgb <0,1,0> }}
 };
 
 //Stain Glass window
@@ -163,54 +163,12 @@ light_source {
 #declare StainGlassWindow = union {
 	object {
 		Petals
-		rotate <-90,0,0>
-
 	}
 	object{
 		FlowerCenter
+		scale 1.4
 	}
+	rotate <-90,0,0>
 };
 
-
-/*
-#declare EdgeWidth = 3 * ( Scaler * Radius);
-#declare CircleDiameterCarrots = 3 * ( Scaler * Radius);
-#declare SpaceBetweenFlowerAndCarrot = 2 * Scaler * Radius);
-
-//for carrot measurements:
-#declare SSide = sqrt(pow(HalfCarrotWidth,2)+pow(CarrotLength,2))/2;
-#declare TSide = sqrt(pow(CarrotWidth,2)-pow(SSide,2))-SSide;
-#declare HalfHypotenuse = sqrt(pow(SSide,2)+pow(TSide,2));
-
-//pow(X,Y) = exponentiation: X raised to the power Y 
-
-
-//#declare CenterCircle = 
-
-
-#declare CenterFlower = union {
-	object {
-		CenterCircle
-	}
-	object {
-		CenterPetals
-	}
-	texture {pigment {rgb <1,1,1> }}
-}*/
-
-/*
-prism {
-    cubic_spline
-    0, // sweep the following shape from here ...
-    1, // ... up through here
-    6, // the number of points making up the shape ...
-    < TSide, -SSide>, // point#1 (control point... not on curve)
-    < TSide,  SSide>, // point#2  ... THIS POINT ...
-    <-SSide,  0>, // point#3
-    < TSide, -SSide>, // point#4
-    < TSide,  SSide>, // point#5 ... MUST MATCH THIS POINT
-    <-SSide,  0>  // point#6 (control point... not on curve)
-    texture { pigment { rgb <0,1,0> }}
-    rotate <90,0,90>
-}*/
-
+object { StainGlassWindow }

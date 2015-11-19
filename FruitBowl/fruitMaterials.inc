@@ -75,10 +75,12 @@
 	texture {
 		pigment { uv_mapping Sheet_MappedPigment }
 		normal {
+			uv_mapping // makes UV mapped
 			bump_map {
 				jpeg "FabricNormal.jpg"
 				bump_size 1
 			}
+			scale 1.5 //don't want to scale by much if you're UV mapping
 		}
 		finish { Sheet_Finish }
 	}

@@ -23,7 +23,7 @@ background { rgb <0,1,1> }
 #declare LeftViewLocation = <0, 1*feet, RoundRadius/4>;
 #declare LeftViewLookAt = <RoomWidth, 1*feet, RoomLength/2>;
 #declare FromDoorLocation = <RoundRadius, 5.6*feet, 0*feet>;
-#declare FromDoorLookAt = <RoundRadius, WallHeight/2, RoomLength>;
+#declare FromDoorLookAt = <RoundRadius, WallHeight/4, RoomLength>;
 
 camera { 
 	location FromDoorLocation

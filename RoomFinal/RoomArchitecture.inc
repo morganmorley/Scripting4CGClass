@@ -1,26 +1,179 @@
 //Basic Architecture
 //ÑÑ to November 30, 2015
 
-#include "Doors.inc"
+#include "StainGlassCutouts.inc"
+#include "BasicMeasurements.inc"
+#include "Textures.inc"
 
 //-------------------------------------------------------------------------------
 //Measurements
 //-------------------------------------------------------------------------------
 
 //==================================================
-//Basic Measurements
-#declare inches = 1;
-#declare feet = 12*inches;
-#declare RoundRadius = 10*feet;
-#declare RoomWidth = RoundRadius*2;
-#declare RoomLength = 4.5*RoundRadius;
-#declare WallWidth = 6*inches;
-#declare WallHeight = RoundRadius*1.5;
-
-//==================================================
 //Specific Measurements
 #declare CenterFloorLength = RoomLength-(2*RoundRadius);
 
+
+//-------------------------------------------------------------------------------
+//Windows
+//-------------------------------------------------------------------------------
+
+//==================================================
+//Round Windows
+
+#declare WindowGlass = 	difference {
+	sphere {
+		<0,0,0>
+		RoundRadius+WallWidth/10
+	}	
+	sphere {
+		<0,0,0>
+		RoundRadius
+	}
+	texture {
+		pigment {
+			color rgbt <1,1,1,1>
+		}
+		finish {
+			ambient 0
+			specular 0.6
+			roughness 0.005
+			reflection {
+				0.1, 1.0 //minimum and maximum amount of reflectivity on object
+				fresnel on		}
+			conserve_energy
+		}
+	}
+	interior {//tells pov-ray what to do with interior of object
+	ior 1.5 //glass
+	}
+
+};
+
+#declare RoundWindows = difference {
+	object {
+		WindowGlass 
+	}
+	box {
+		<-RoundRadius-1,-RoundRadius-1,-RoundRadius-1>
+		<RoundRadius+1,0,RoundRadius+1>
+	}
+	box {
+		<-RoundRadius-1,-RoundRadius-1,-RoundRadius-1>
+		<RoundRadius+1,RoundRadius+1,0>
+	}
+};
+
+//==================================================
+//StainGlass
+
+#declare StainGlassHoles = union {
+	#declare Index = CenterFloorLength/4;
+	#while (Index < CenterFloorLength+1)
+		object {
+			OneStainGlassCutout
+			scale 2
+			rotate y*90
+			translate <0,WallHeight/3+6, RoundRadius+Index>
+		}
+		#declare Index = Index + CenterFloorLength/4;
+	#end
+};
+
+#declare WindowGlassCylinder1 = cylinder {
+	<-WallWidth*3/4,0,0>
+	<-WallWidth/4,0,0>
+	TotalRadius
+	texture { StainGlass_Texture2 scale 100}
+};
+
+#declare WindowGlassCylinder2 = cylinder {
+	<-WallWidth*3/4,0,0>
+	<-WallWidth/4,0,0>
+	TotalRadius
+	texture { StainGlass_Texture1 scale 100}
+};
+
+#declare WindowGlassCylinder3 = cylinder {
+	<-WallWidth*3/4,0,0>
+	<-WallWidth/4,0,0>
+	TotalRadius
+	texture { StainGlass_Texture3 scale 100}
+};
+
+#declare StainGlassWindows = union {
+	#declare Index = CenterFloorLength/4;
+	object {
+		WindowGlassCylinder1
+		scale 2
+		translate <0,WallHeight/3+6, RoundRadius+CenterFloorLength/4>
+	}
+	object {
+		WindowGlassCylinder3
+		scale 2
+		translate <0,WallHeight/3+6, RoundRadius+CenterFloorLength/2>
+	}		
+	object {
+		WindowGlassCylinder2
+		scale 2
+		translate <0,WallHeight/3+6, RoundRadius+CenterFloorLength*.75>
+	}
+	object {
+		WindowGlassCylinder1
+		scale 2
+		translate <0,WallHeight/3+6, RoundRadius+CenterFloorLength>
+	}
+};
+//==================================================
+//BackWindows
+
+#declare BackWindowCutout = box {
+	<RoomWidth/4,1.5*feet,RoomLength-RoundRadius>
+	<RoomWidth*(3/4),WallHeight-(1.5*feet),RoomLength+RoundRadius>
+};
+
+
+#declare BackWindows = difference {
+	cylinder {
+		<RoomWidth/2,1.5*feet,RoomLength-RoundRadius>
+		<RoomWidth/2,WallHeight-1.5*feet,RoomLength-RoundRadius>
+		RoundRadius+WallWidth/10
+	}
+	box {
+		<-RoomWidth,0, RoomLength/2>
+		<RoomWidth,WallHeight,RoomLength-RoundRadius>
+	}
+	cylinder {
+		<RoomWidth/2,1*feet,RoomLength-RoundRadius>
+		<RoomWidth/2,WallHeight-(1*feet),RoomLength-RoundRadius>
+		RoundRadius
+	}
+	box {
+		<RoomWidth*(3/4),0,RoomLength-RoundRadius*2>
+		<RoomWidth+10,WallHeight,RoomLength+10>
+	}
+	box {
+		<-10,0,RoomLength-RoundRadius*2>
+		<RoomWidth/4,WallHeight,RoomLength+10>
+	}
+	texture {
+		pigment {
+			color rgbt <1,1,1,1>
+		}
+		finish {
+			ambient 0
+			specular 0.6
+			roughness 0.005
+			reflection {
+				0.1, 1.0 //minimum and maximum amount of reflectivity on object
+				fresnel on		}
+			conserve_energy
+		}
+	}
+	interior {//tells pov-ray what to do with interior of object
+		ior 1.5 //glass
+	}
+};
 
 //-------------------------------------------------------------------------------
 //Floors
@@ -58,7 +211,6 @@
 		rotate y * 180
 		translate <RoundRadius,0,RoomLength-RoundRadius>
 	}
-	texture { pigment { rgb <.4,.4,.4>}}
 };
 
 //==================================================
@@ -126,12 +278,13 @@
 			SimpleFloor
 			scale y*3
 			translate <0,1.5*feet,0>
-			texture { pigment { rgb <1,.4,.4>}}
 		}
 		object {
 			PlatformCutout
 		}
-		texture { pigment { rgb <1,.4,.4>}}
+		texture { 
+			Platform_Texture
+		}
 };
 
 #declare Floor = union {
@@ -150,13 +303,13 @@
 //==================================================
 //Basic Walls - Oval Shape
 #declare LeftCenterWall = box {
-	<-WallWidth,-WallWidth,RoundRadius>
-	<0,WallHeight,RoundRadius+CenterFloorLength>
+		<-WallWidth,-WallWidth,RoundRadius>
+		<0,WallHeight,RoundRadius+CenterFloorLength>
 };
 
 #declare RightCenterWall = object {
-	LeftCenterWall 
-	translate <WallWidth+RoomWidth,0,0>
+		LeftCenterWall 
+		translate <WallWidth+RoomWidth,0,0>
 };
 
 #declare RoundWalls = difference {
@@ -194,19 +347,15 @@
 			<RoomWidth/6,WallHeight+1,RoomWidth>
 			translate <RoundRadius,WallHeight/2,RoundRadius+CenterFloorLength>
 		}
+		object {
+			BackWindowCutout
+		}
 	}
 	object {
 		RoundWalls
 		translate <RoundRadius,WallHeight/2,RoundRadius>
 	}
-	texture { pigment { rgb <.4,.4,.4>}}
 };
-
-//difference door cutout from walls and add doors
-//object { 
-	//Doors 
-	//translate <RoomRadius,0,0>
-//}
 
 //-------------------------------------------------------------------------------
 //Ceiling
@@ -230,7 +379,6 @@
 		<0,(CenterFloorLength/2)+(1*feet),0>
 		RoundRadius
 	}
-	texture { pigment { rgb <.4,.4,.4>}}
 	rotate <90,0,0>
 	translate <RoundRadius,WallHeight,RoundRadius+(CenterFloorLength/2)>
 };
@@ -240,7 +388,7 @@
 //-------------------------------------------------------------------------------
 
 //==================================================
-//Cylinder
+//Platform
 
 #declare BedPlatform = cylinder {
 	<0,-.5*feet,0>
@@ -250,8 +398,13 @@
 	texture { pigment { rgb <.4,.4,.4>}}
 };
 
+//==================================================
+//Fence
+
+
+
 //-------------------------------------------------------------------------------
-//RoomArchitecture
+//RoomArchitectureWhole
 //-------------------------------------------------------------------------------
 
 #declare RoomArchitecture = union {
@@ -261,14 +414,44 @@
 	object {
 		Platform
 	}
+	difference {
+		object {
+			Walls
+			texture { Walls_Texture1 }
+			texture { Walls_Texture2 }
+			texture { Walls_Texture3 }
+		}
+		object { StainGlassHoles }
+		object {
+			StainGlassHoles
+			translate <RoomWidth,0,0>
+		}
+	}
+	object { StainGlassWindows }
 	object {
-		Walls
+		StainGlassWindows
+		translate <RoomWidth+WallWidth*2,0,0>
 	}
 	object {
 		CenterCeiling
+		texture { Walls_Texture1 }
+		texture { Walls_Texture2 }
+		texture { Walls_Texture3 }
 	}
 	object {
 		BedPlatform
+	}
+	object {
+		RoundWindows
+		translate <RoomWidth/2, WallHeight, RoomLength-RoundRadius>
+	}
+	object {
+		RoundWindows 
+		rotate y*180
+		translate <RoomWidth/2, WallHeight, RoundRadius>
+	}
+	object {
+		BackWindows
 	}
 };
 

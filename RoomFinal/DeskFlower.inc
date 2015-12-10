@@ -1,20 +1,7 @@
 //November 12, 2015
 //Polygon Mesh Leaf
 
-
-background {
-	rgb <1,1,1>
-}
-
-camera {
-	location <5,10,-20>
-	look_at <0,0,0>
-}
-
-light_source {
-	<0,10,-5>
-	rgb <1,1,1>
-}
+#include "Textures.inc"
 
 #declare Origin = <0,0,0>;
 
@@ -89,46 +76,16 @@ light_source {
 		<BowlRadius, BowlRadius/2, BowlRadius>
 		translate <0,BowlRadius*.75,0>
 	}
-	texture {
-		pigment {
-			color rgbt <0,1,1,.9>
-		}
-		finish {
-			ambient 0
-			specular 0.6
-			roughness 0.005
-			//reflection {0.5}
-			//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
-			reflection {
-				0.1, 1.0 //minimum and maximum amount of reflectivity on object
-				fresnel on		}
-			conserve_energy
-		}
-	}
+	texture { WaterTexture }
 	interior {//tells pov-ray what to do with interior of object
-	ior 1.33 //water
+		ior 1.33 //water
 	}
 };
 
 #declare WaterBowl = union {
 	object {
 		Bowl
-		texture {
-			pigment {
-				color rgbt <1,1,1,1>
-			}
-			finish {
-				ambient 0
-				specular 0.6
-				roughness 0.005
-				//reflection {0.5}
-				//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
-				reflection {
-					0.1, 1.0 //minimum and maximum amount of reflectivity on object
-					fresnel on		}
-				conserve_energy
-			}
-		}
+		texture { ClearGlassTexture }
 		interior {//tells pov-ray what to do with interior of object
 		ior 1.5 //glass
 		}
@@ -139,7 +96,7 @@ light_source {
 };
 
 
-union {
+#declare DeskFlower = union {
 	#declare Index = 0;
 	#while (Index < 360 )
 	object {

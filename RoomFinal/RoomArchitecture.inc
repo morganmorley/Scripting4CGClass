@@ -85,6 +85,7 @@
 	<-WallWidth/4,0,0>
 	TotalRadius
 	texture { StainGlass_Texture2 scale 100}
+	interior { ior 1.5 }
 };
 
 #declare WindowGlassCylinder2 = cylinder {
@@ -92,6 +93,7 @@
 	<-WallWidth/4,0,0>
 	TotalRadius
 	texture { StainGlass_Texture1 scale 100}
+	interior { ior 1.5 }
 };
 
 #declare WindowGlassCylinder3 = cylinder {
@@ -99,6 +101,7 @@
 	<-WallWidth/4,0,0>
 	TotalRadius
 	texture { StainGlass_Texture3 scale 100}
+	interior { ior 1.5 }
 };
 
 #declare StainGlassWindows = union {

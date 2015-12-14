@@ -74,7 +74,7 @@
 
 #declare ClearGlassTexture = texture {
 	pigment {
-		color rgbt <1,1,1,1>
+		color rgbt <1,1,1,.95>
 	}
 	finish {
 		ambient 0
@@ -89,9 +89,27 @@
 	}
 };
 
+#declare WhiteGlassTexture = texture {
+	pigment {
+		color rgbt <1,1,1,.05>
+	}
+	finish {
+		emission .75
+		ambient 0
+		specular 0.6
+		roughness 0.005
+		//reflection {0.5}
+		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
+		reflection {
+			0.1, 1.0 //minimum and maximum amount of reflectivity on object
+			fresnel on		}
+		conserve_energy
+	}
+};
+
 #declare RedGlassTexture = texture {
 	pigment {
-		color rgbt <1,0,0,1>
+		color rgbt <.9,0,.01,.4>
 	}
 	finish {
 		ambient 0
@@ -125,7 +143,7 @@
 
 #declare BlueGlassTexture = texture {
 	pigment {
-		color rgbt <0,0,1,1>
+		color rgbt <0,0,1,.6>
 	}
 	finish {
 		ambient 0

@@ -11,14 +11,14 @@
 #include "ChessTable.inc"
 #include "Chair.inc"
 #include "Lamp.inc"
-
+#include "Chandelier.inc"
 
 
 
 
 // Draft:
 
-background { rgb <0,1,1> }
+background { rgb <.5,.3,.3> }
 
 //-------------------------------------------------------------------------------
 //Camera
@@ -34,6 +34,9 @@ background { rgb <0,1,1> }
 #declare ChessLookAt = <RoomWidth/4,1.5*feet+2*feet, RoomLength/2>;
 #declare FromDoorLocation = <RoundRadius, 6*feet, 0*feet>;
 #declare FromDoorLookAt = <RoundRadius, WallHeight/4, RoomLength>;
+#declare ChandelierLocation = <RoomWidth/2,WallHeight+RoundRadius-15,RoomLength-RoundRadius*1.65>;
+#declare ChandelierLookAt = <RoomWidth/2,WallHeight+RoundRadius-25, RoomLength-RoundRadius+1>;
+
 
 #declare DeskCamera = camera { 
 	angle 78
@@ -53,17 +56,30 @@ background { rgb <0,1,1> }
 	angle 100
 	location ChessLocation
 	look_at ChessLookAt
-};#declare BedroomCamera = camera {
+};
+#declare BedroomCamera = camera {
 	ultra_wide_angle
 	location BedroomLocation
 	look_at BedroomLookAt
-};#declare StudyCamera = camera {
+};
+#declare StudyCamera = camera {
 	angle 65
 	location StudyLocation
 	look_at StudyLookAt
 };
+#declare ChandelierCamera = camera {
+	angle 60
+	location ChandelierLocation
+	look_at ChandelierLookAt
+  focal_point <RoomWidth/2,WallHeight+RoundRadius-25,RoomLength-RoundRadius-2*feet>
+  aperture 1.4     // 0.05 ~ 1.5 more = more blurring
+  blur_samples 10 // 4 ~ 100  more = higher quality; fewer = faster
+  confidence 0.9   // 0 ~ 1 how cose to the correct color, 0 ~ 1, default 0.9
+  variance 1/128   // 1/64 ~ 1/1024 ~ (default) smallest displayable color difference
 
-camera {ChessCamera}
+};
+
+camera {ChandelierCamera}
 
 
 
@@ -97,15 +113,15 @@ camera {ChessCamera}
 				jpeg "BackSky2.jpg"
 			}
 			//scale x*
-			scale y*.3 //don't want to scale by much if you're UV mapping
+			scale y*.4 //don't want to scale by much if you're UV mapping
 		}
 		finish {
-			emission .65
+			emission .6
 		}
 	}
-	translate <0,-WallHeight/4,0>
+	translate <0,-WallHeight*2.125,0>
 	}
-	box { //Back Yard Photo
+	/*box { //Back Yard Photo
 	<0,0,RoomLength+5*feet>
 	<RoomWidth,WallHeight*1.5,RoomLength+5.5*feet>
 	texture {
@@ -120,8 +136,8 @@ camera {ChessCamera}
 			emission 0.9
 		}
 	}
-	translate <0,-.5*WallHeight,0>
-	}
+	translate <0,-.5*WallHeight,-4*feet>
+	}*/
 };
 
 //-------------------------------------------------------------------------------
@@ -131,18 +147,18 @@ camera {ChessCamera}
 
 //Lights Draft
 
-//global_settings {
-	//radiosity {
-		//Rad_Settings (Radiosity_Default, off, off ) //Type, using normal?, using media?
+global_settings {
+	radiosity {
+		Rad_Settings (Radiosity_Default, off, off ) //Type, using normal?, using media?
 		/*pretrace_start 0.08
 		pretrace_end 0.01 //smaller, the nicer it looks
 		count 500
 		nearest_count 20
-		error_bound .35
-	//}
-//}
+		error_bound .35*/
+	}
+}
 
-light_source {
+/*light_source {
 	<RoomWidth/2,WallHeight+RoundRadius-1,RoundRadius>
 	rgb <1,1,1> * 500
 	spotlight
@@ -155,31 +171,36 @@ light_source {
 }*/
 
 light_source { //Chandelier
-	<RoomWidth/2,WallHeight+RoundRadius-1,RoomLength-RoundRadius>
-	rgb <1,1,1> * 25
+	<RoomWidth/2,WallHeight+RoundRadius-1.6,RoomLength-RoundRadius>
+	rgb <1,1,1> * 10
 	spotlight
 	radius 90
 	falloff 90
-	tightness 1
-	point_at <RoomLength/2, WallHeight, RoomLength-RoundRadius*1.5>
+	point_at <RoomWidth/2, WallHeight, RoomLength-RoundRadius>
 	fade_power 2 
 	fade_distance 11
 }
+
+light_source { //Light from cylinder chandelier light bulb
+	<RoomWidth/2,WallHeight+RoundRadius-1,RoomLength-RoundRadius>
+	rgb <1,1,1> 
+}
+
 
 light_source {//Bank Lamp Light
 	<RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet,RoomLength-RoundRadius>
 	color rgb 1 * .2
 }
 
-light_source { //Balances the light but take out in study camera
+/*light_source { //Balances the light but take out in study camera
 	<RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet,RoundRadius>
 	color rgb 1 * .5
-}
+}*/
 
 light_source {//Sun
 	<RoomWidth*3/4, WallHeight*3.5, RoomLength*2>
-	//color rgb <.5,.3,.3> * 2 //for sunset, most cameras
-	color rgb <.5,.3,.3> * 3 //for sunset, study camera, chess camera
+	color rgb <.5,.3,.3> * 2 //for sunset, most cameras
+	//color rgb <.5,.3,.3> * 3 //for sunset, study camera, chess camera
 	parallel
 	projected_through {BackPictures}
 }
@@ -192,20 +213,20 @@ light_source {//StainGlassLightSource
 	projected_through {BackPictures}
 }
 
-light_source { //Front Window Light, only on with large and chess cameras
+/*light_source { //Front Window Light, only on with large and chess cameras
 	<RoomWidth*1/4, WallHeight*3.5, -RoomLength*2>
 	color rgb <.5,.3,.3> * .75 //for sunset
 	parallel
 	point_at <RoomWidth/2,1.5*feet,RoomLength/2>
 	//projected_through {BackPictures}
-}
+}*/
 
 //-------------------------------------------------------------------------------
 //Objects
 //-------------------------------------------------------------------------------
 
 object { RoomArchitecture }
-object {
+/*object {
 	BasicDesk
 	rotate y*180
 	translate <RoomWidth/2,1.5*feet,RoomLength-RoundRadius>
@@ -217,15 +238,24 @@ object {
 object {
 	ChessSet
 	translate <RoomWidth/4,1.5*feet+TableHeight+1,RoomLength/2>
-}
+}*/
 object { BackPictures }
-object { Shelf rotate y*(-55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
+/*object { Shelf rotate y*(-55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
 object { Shelf rotate y*(55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
 object { ChessTable rotate y*45 translate <RoomWidth/4,1.5*feet-1,RoomLength/2> }
 object { Chair rotate y*90 translate <RoomWidth/4-6,1.5*feet,RoomLength/2-RoomWidth/10>}
 object { Chair rotate y*-90 translate <RoomWidth/16*5-6,1.5*feet,RoomLength/2+ RoomWidth/10>}
 //object { Lamp_Shade translate <RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet-Lamp_ShadeRadius,RoomLength-RoundRadius>}
-//chair in study
+//chair in study*/
+object { Chandelier scale 2 translate <RoomWidth/2, WallHeight+RoundRadius, RoomLength-RoundRadius-2*feet >}
+cylinder {
+	<RoomWidth/2, WallHeight+RoundRadius, RoomLength-RoundRadius-2*feet >
+	<RoomWidth/2, WallHeight+RoundRadius-1.5, RoomLength-RoundRadius-2*feet >
+	18
+	texture {	WhiteGlassTexture }
+	interior {ior 1.5 }
+}
+
 
 //Basic Room needs window cutouts, windows and stainglass windows, chain, columns, iron railings, and Ladder
 //Dome?

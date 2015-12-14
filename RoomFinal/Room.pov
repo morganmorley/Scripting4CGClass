@@ -34,8 +34,8 @@ background { rgb <.5,.3,.3> }
 #declare ChessLookAt = <RoomWidth/4,1.5*feet+2*feet, RoomLength/2>;
 #declare FromDoorLocation = <RoundRadius, 6*feet, 0*feet>;
 #declare FromDoorLookAt = <RoundRadius, WallHeight/4, RoomLength>;
-#declare ChandelierLocation = <RoomWidth/2,WallHeight+RoundRadius-15,RoomLength-RoundRadius*1.65>;
-#declare ChandelierLookAt = <RoomWidth/2,WallHeight+RoundRadius-25, RoomLength-RoundRadius+1>;
+#declare ChandelierLocation = <RoomWidth/2+3,WallHeight+RoundRadius-15,RoomLength-RoundRadius*1.65>;
+#declare ChandelierLookAt = <RoomWidth/2-3,WallHeight+RoundRadius-25, RoomLength-RoundRadius+1>;
 
 
 #declare DeskCamera = camera { 
@@ -68,7 +68,7 @@ background { rgb <.5,.3,.3> }
 	look_at StudyLookAt
 };
 #declare ChandelierCamera = camera {
-	angle 60
+	angle 65
 	location ChandelierLocation
 	look_at ChandelierLookAt
   focal_point <RoomWidth/2,WallHeight+RoundRadius-25,RoomLength-RoundRadius-2*feet>

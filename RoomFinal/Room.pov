@@ -4,11 +4,11 @@
 #include "RoomArchitecture.inc"
 #include "Desk.inc"
 #include "DeskFlower.inc"
-//#include "ChessSet.inc"
+#include "ChessSet.inc"
 #include "BasicMeasurements.inc"
 #include "rad_def.inc"
 #include "Shelf.inc"
-//#include "ChessTable.inc"
+#include "ChessTable.inc"
 #include "Chair.inc"
 #include "Lamp.inc"
 //#include "Chandelier.inc"
@@ -38,7 +38,8 @@ background { rgb <.5,.3,.3> }
 #declare FromDoorLookAt = <RoundRadius, WallHeight/4, RoomLength>;
 #declare ChandelierLocation = <RoomWidth/2+3,WallHeight+RoundRadius-15,RoomLength-RoundRadius*1.65>;
 #declare ChandelierLookAt = <RoomWidth/2-3,WallHeight+RoundRadius-25, RoomLength-RoundRadius+1>;
-
+#declare ChessCloseUpLocation =  <RoomWidth/4-6,1.5*feet+4*feet,RoomLength/2-RoomWidth/10>;
+#declare ChessCloseUpLookAt = <RoomWidth/4,1.5*feet+TableHeight,RoomLength/2>;
 
 #declare DeskCamera = camera { 
 	angle 78
@@ -73,10 +74,13 @@ background { rgb <.5,.3,.3> }
   blur_samples 10 // 4 ~ 100  more = higher quality; fewer = faster
   confidence 0.9   // 0 ~ 1 how cose to the correct color, 0 ~ 1, default 0.9
   variance 1/128   // 1/64 ~ 1/1024 ~ (default) smallest displayable color difference
-
+};
+#declare ChessCloseUpCamera = camera {
+	location ChessCloseUpLocation
+	look_at ChessCloseUpLookAt
 };
 
-camera {StudyCamera}
+camera {ChessCloseUpCamera}
 
 
 
@@ -207,10 +211,10 @@ light_source {//Bank Lamp Light
 	color rgb 1 * .2
 }
 
-/*light_source { //Balances the light but take out in study camera
+light_source { //Balances the light but take out in study camera
 	<RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet,RoundRadius>
-	color rgb 1 * .5
-}*/
+	color rgb 1 * .05
+}
 
 light_source {//Sun
 	<RoomWidth*3/4, WallHeight*3.5, RoomLength*2>
@@ -220,13 +224,13 @@ light_source {//Sun
 	projected_through {BackPictures}
 }
 
-/*light_source {//StainGlassLightSource
+light_source {//StainGlassLightSource
 	<-RoomWidth*2, WallHeight/2, RoomLength/2>
 	color rgb <.5,.3,.3> * .5 //for sunset
 	parallel
 	point_at <RoomWidth/2,1.5*feet,RoomLength/2>
 	projected_through {BackPictures}
-}*/
+}
 
 light_source { //Front Window Light, only on with large and chess cameras
 	<RoomWidth*.25, WallHeight*3.5, -RoomLength*4>
@@ -250,16 +254,16 @@ object {
 	DeskFlower
 	translate <RoomWidth/4,Shelf_ShelvesBottomHeight+BowlRadius, RoomLength-RoundRadius*.5>
 }
-/*object {
+object {
 	ChessSet
 	translate <RoomWidth/4,1.5*feet+TableHeight+1,RoomLength/2>
-}*/
+}
 object { BackPictures }
 object { Shelf rotate y*(-55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
 object { Shelf rotate y*(55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
-/*object { ChessTable rotate y*45 translate <RoomWidth/4,1.5*feet-1,RoomLength/2> }
+object { ChessTable rotate y*45 translate <RoomWidth/4,1.5*feet-1,RoomLength/2> }
 object { Chair rotate y*90 translate <RoomWidth/4-6,1.5*feet,RoomLength/2-RoomWidth/10>}
-object { Chair rotate y*-90 translate <RoomWidth/16*5-6,1.5*feet,RoomLength/2+ RoomWidth/10>}*/
+object { Chair rotate y*-90 translate <RoomWidth/16*5-6,1.5*feet,RoomLength/2+ RoomWidth/10>}
 object { Lamp_Shade rotate y*90 translate <RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet-Lamp_ShadeRadius,RoomLength-RoundRadius>}
 //chair in study
 object { Chair rotate y*-90 translate <RoomWidth/2+.75*feet,1.5*feet,RoomLength-RoundRadius+2*feet>}

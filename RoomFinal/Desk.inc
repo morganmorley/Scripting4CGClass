@@ -2,6 +2,7 @@
 //November 19, 2015
 
 #include "colors.inc"
+#include "Textures.inc"
 
 //62.25"W x 32"D x 31.25"T. Keyboard drawer, 26"W x 16.25"D x 2.75"T; knee space, 28"W x 25.25"D x 24.75"T. 
 
@@ -109,6 +110,6 @@
 	object {
 		TempLegs
 	}
-	texture { pigment { rgb <.9,.9,.9> }}
+	texture { WhiteWoodTexture }
 };
 

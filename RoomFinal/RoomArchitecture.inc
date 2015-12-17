@@ -4,6 +4,7 @@
 #include "StainGlassCutouts.inc"
 #include "BasicMeasurements.inc"
 #include "Textures.inc"
+#include "Bedroom.inc"
 
 //-------------------------------------------------------------------------------
 //Measurements
@@ -393,17 +394,47 @@
 //==================================================
 //Platform
 
-#declare BedPlatform = cylinder {
-	<0,-.5*feet,0>
-	<0,.5*feet,0>
-	RoundRadius
-	translate <RoundRadius,WallHeight-(1.5*feet),RoundRadius+CenterFloorLength>
-	texture { pigment { rgb <.4,.4,.4>}}
+#declare BedPlatform = difference {
+	cylinder {
+		<0,-.5*feet,0>
+		<0,.5*feet,0>
+		RoundRadius
+		translate <RoundRadius,WallHeight-(1.5*feet),RoundRadius+CenterFloorLength>
+		texture { DarkWoodTexture}
+	}
+	object {
+		BedSpread
+		scale 1.2
+		rotate y*180
+	}
+	object {
+		Bed_Headboard
+		scale 1.2
+		rotate y*180
+	}
 };
 
-//==================================================
-//Fence
-
+#declare BedPlatormBorder = difference {
+	difference {
+		cylinder {
+			<0,-.5*feet,0>
+			<0,.75*feet,0>
+			RoundRadius+2
+			translate <RoundRadius,WallHeight-(1.5*feet),RoundRadius+CenterFloorLength>
+		}
+		cylinder {
+			<0,-2*feet,0>
+			<0,2*feet,0>
+			RoundRadius
+			translate <RoundRadius,WallHeight-(1.5*feet),RoundRadius+CenterFloorLength>
+		}
+		texture { IronTexture2 }
+	}
+	box { 
+		<-RoomWidth-RoundRadius,WallHeight-2*feet,RoomLength-RoundRadius>
+		<RoomWidth+RoundRadius,WallHeight+2*feet,RoomLength>
+	}
+};
 
 
 //-------------------------------------------------------------------------------
@@ -423,6 +454,7 @@
 			texture { Walls_Texture1 }
 			texture { Walls_Texture2 }
 			texture { Walls_Texture3 }
+			texture { Walls_Texture5 } //only for chandelier and Bedroom
 		}
 		object { StainGlassHoles }
 		object {
@@ -440,10 +472,11 @@
 		texture { Walls_Texture1 }
 		texture { Walls_Texture2 }
 		texture { Walls_Texture3 }
+		texture { Walls_Texture4 } //only for chandelier and Bedroom
+
 	}
-	object {
-		BedPlatform
-	}
+	object { BedPlatform }
+	object { BedPlatormBorder } 
 	object {
 		RoundWindows
 		translate <RoomWidth/2, WallHeight, RoomLength-RoundRadius>

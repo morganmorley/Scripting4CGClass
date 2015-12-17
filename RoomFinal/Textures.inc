@@ -3,7 +3,6 @@
 
 
 
-
 //-------------------------------------------------------------------------------
 //Water
 //-------------------------------------------------------------------------------
@@ -63,6 +62,39 @@
 			//fresnel on		}
 		conserve_energy
 	}
+};
+
+#declare IronTexture1 = texture {
+	pigment {
+		color rgb <0,0,0>
+	}
+};
+
+
+#declare Iron_ColorMap = color_map {
+    [0.0 rgb <0.2, 0.2, 0.2>]
+    [0.8 rgb <0.9, 0.9, 0.9>]
+    [1.0 rgb <0.6, 0.6, 0.5>]
+};
+
+#declare Iron_Pigment2 = pigment {
+    marble
+    turbulence 1
+    color_map { Iron_ColorMap }
+    scale 30
+};
+
+#declare IronTexture2 = texture {
+	pigment {
+		Iron_Pigment2
+	}
+  finish {
+        specular 1   
+        roughness 0.0001
+        phong 0.25
+        phong_size 75
+        brilliance 4
+  }
 };
 
 
@@ -215,6 +247,13 @@
 //Wood
 //-------------------------------------------------------------------------------
 
+#declare DarkWoodPigment = pigment {
+	uv_mapping // makes UV mapped
+	image_map {
+		jpeg "DarkWood.jpg"
+	}
+	scale .4 //don't want to scale by much if you're UV mapping
+};
 #declare DarkWoodTexture = texture {
 	pigment {
 			uv_mapping // makes UV mapped
@@ -228,6 +267,67 @@
 			roughness 0.005
 			reflection .005
 		}
+};
+
+#declare LightWoodPigment = pigment {
+	uv_mapping // makes UV mapped
+	image_map {
+		jpeg "LightWood.jpg"
+	}
+	scale .4 //don't want to scale by much if you're UV mapping
+};
+#declare LightWoodTexture = texture {
+	pigment { LightWoodPigment }
+		finish {
+			specular 0.4
+			roughness 0.005
+			reflection .005
+		}
+};
+
+#declare WhiteWoodTexture = texture {
+	LightWoodTexture
+	}
+	texture {
+		pigment { color rgbt <1,1,1,.9>}
+};
+
+#declare WoodPigmentMap = pigment_map {
+	[0.1 LightWoodPigment]
+	[0.9 DarkWoodPigment]
+};
+
+#declare Wood_GradientPigment1 = pigment {
+	gradient <0,0,-1>//default color map idea - value is direction it goes in
+	//color_map {ColorMap} //could be color or pigment maps
+	pigment_map {WoodPigmentMap}
+	scale 20*feet  //by default, gradient repeats every one unit
+	translate <0,0,0> //gets gradient to fit the sphere radius
+	turbulence 3
+};
+#declare Wood_GradientPigment2 = pigment {
+	gradient <0,0,-1>//default color map idea - value is direction it goes in
+	//color_map {ColorMap} //could be color or pigment maps
+	pigment_map {WoodPigmentMap}
+	scale 20*feet  //by default, gradient repeats every one unit
+	translate <3*feet,4*feet,0> //gets gradient to fit the sphere radius
+	turbulence 3
+};
+#declare Wood_GradientPigment3 = pigment {
+	gradient <0,0,-1>//default color map idea - value is direction it goes in
+	//color_map {ColorMap} //could be color or pigment maps
+	pigment_map {WoodPigmentMap}
+	scale 20*feet  //by default, gradient repeats every one unit
+	translate <-5*feet,-5*feet,0> //gets gradient to fit the sphere radius
+	turbulence 3
+};
+#declare Wood_GradientPigment4 = pigment {
+	gradient <0,0,-1>//default color map idea - value is direction it goes in
+	//color_map {ColorMap} //could be color or pigment maps
+	pigment_map {WoodPigmentMap}
+	scale 20*feet  //by default, gradient repeats every one unit
+	translate <8*feet,10*feet,0> //gets gradient to fit the sphere radius
+	turbulence 3
 };
 
 //-------------------------------------------------------------------------------
@@ -251,7 +351,7 @@
 
 
 //-------------------------------------------------------------------------------
-//RoomArchitecture
+//Objects
 //-------------------------------------------------------------------------------
 
 //==================================================
@@ -275,6 +375,106 @@
 
 	}
 	finish { Platform_Finish }
+};
+
+
+//==================================================
+//Bed
+#declare BedSpread_CheckerPigment = pigment { 
+	checker 
+	rgb <0,.3,.5>
+	rgb <0,.7,.5>
+	scale .1
+	rotate <0,45,0>
+	translate <0,.4,0>
+};
+
+#declare BedSpread_DarkPigment = pigment { rgb <0,.3,.5> };
+
+#declare BedSpread_MappedPigment = pigment_map {
+	[0.0 BedSpread_DarkPigment ]
+	[0.29 BedSpread_DarkPigment ]
+	[0.3 BedSpread_CheckerPigment ]
+	[1.0 BedSpread_CheckerPigment ]
+};
+
+#declare BedSpread_GradientPigment = pigment {
+	gradient <0,0,-1>//default color map idea - value is direction it goes in
+	//color_map {ColorMap} //could be color or pigment maps
+	pigment_map {BedSpread_MappedPigment}
+	scale 6*feet  //by default, gradient repeats every one unit
+	translate <2*feet,0,3*feet> //gets gradient to fit the sphere radius
+	//turbulence .5
+};
+
+
+#declare BedSpread_Finish = finish {
+	specular 0.05 //Max highlight intensity: 0 -> 1
+      roughness 0.5 //surface roughness: 0.0005 -> 1             
+};
+
+#declare BedSpread_Texture = texture {
+	pigment { /*uv_mapping*/ BedSpread_GradientPigment}
+	normal {
+		uv_mapping // makes UV mapped
+		bump_map {
+			jpeg "FabricNormal.jpg"
+			bump_size .5
+		}
+		rotate x*-12.5
+		scale .3 //don't want to scale by much if you're UV mapping
+	}
+	finish { BedSpread_Finish }
+};
+
+#declare Pillow_CheckerPigment = pigment { 
+	checker 
+	rgb <0,.3,.5>
+	rgb <0,.7,.5>
+	scale .35
+	rotate <0,45,0>
+	translate <0,.4,.025>
+};
+
+#declare Pillow_LightPigment = pigment { rgb <0,.7,.5> };
+
+#declare Pillow_MappedPigment = pigment_map {
+	[0.0 Pillow_LightPigment ]
+	[0.25 Pillow_LightPigment ]
+	[0.26 Pillow_CheckerPigment ]
+	[0.74 Pillow_CheckerPigment ]
+	[0.75 Pillow_LightPigment ]
+	[1.0 Pillow_LightPigment ]
+};
+
+#declare Pillow_GradientPigment = pigment {
+	gradient <0,0,-.1>//default color map idea - value is direction it goes in
+	//color_map {ColorMap} //could be color or pigment maps
+	pigment_map {Pillow_MappedPigment}
+	scale .75*feet  //by default, gradient repeats every one unit
+	translate <0*feet,.6,.45*feet> //gets gradient to fit the sphere radius
+	//turbulence .5
+};
+
+
+#declare Pillow_Finish = finish {
+	specular 0.05 //Max highlight intensity: 0 -> 1
+      roughness 0.5 //surface roughness: 0.0005 -> 1             
+};
+
+
+#declare Pillow_Texture = texture {
+	pigment { Pillow_GradientPigment }
+	normal {
+		uv_mapping // makes UV mapped
+		bump_map {
+			jpeg "FabricNormal.jpg"
+			bump_size .5
+		}
+		rotate x*-12.5
+		scale .7 //don't want to scale by much if you're UV mapping
+	}
+	finish { Pillow_Finish }
 };
 
 //==================================================
@@ -327,6 +527,15 @@
 	finish { Walls_Finish }
 };
 
+#declare Walls_Texture4 = texture {
+	pigment { rgbt <.95,.95,.95,.825>}
+	finish { Walls_Finish }
+};
+
+#declare Walls_Texture5 = texture {
+	pigment { rgbt <.95,.95,.95,.95>}
+	finish { Walls_Finish }
+};
 
 
 

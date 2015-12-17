@@ -4,14 +4,16 @@
 #include "RoomArchitecture.inc"
 #include "Desk.inc"
 #include "DeskFlower.inc"
-#include "ChessSet.inc"
+//#include "ChessSet.inc"
 #include "BasicMeasurements.inc"
 #include "rad_def.inc"
 #include "Shelf.inc"
-#include "ChessTable.inc"
+//#include "ChessTable.inc"
 #include "Chair.inc"
 #include "Lamp.inc"
-#include "Chandelier.inc"
+//#include "Chandelier.inc"
+//#include "Bedroom.inc"
+//#include "Cup.inc"
 
 
 
@@ -24,10 +26,10 @@ background { rgb <.5,.3,.3> }
 //Camera
 //-------------------------------------------------------------------------------
 
-#declare DeskLocation = <RoomWidth/2, 5.5*feet, RoomLength-RoundRadius*.3>;
-#declare DeskLookAt = <RoundRadius, 6*feet, 0*feet>;
-#declare BedroomLocation = <RoomWidth-(RoundRadius/4.312),WallHeight+(3*feet),RoomLength-RoundRadius*.5>;
-#declare BedroomLookAt = <0,WallHeight-2*feet,RoomLength-RoundRadius*1.75>;
+#declare DeskLocation = <RoomWidth*.75, 5.5*feet, RoomLength-RoundRadius>;
+#declare DeskLookAt = <RoundRadius*.25, 5.5*feet, RoomLength-RoundRadius>;
+#declare BedLocation = <RoomWidth/2,WallHeight+(1*feet),RoomLength-RoundRadius*.9>;
+#declare BedLookAt = <RoomWidth/2,WallHeight-1*feet,RoomLength-(RoundRadius*1.75)>;
 #declare StudyLocation = <RoomWidth/2,5*feet+1.5*feet,RoomLength/2>;
 #declare StudyLookAt = <RoomWidth/2,4*feet+1.5*feet,RoomLength>;
 #declare ChessLocation = <RoomWidth/2, 1.5*feet+4*feet, RoomLength/2>;
@@ -42,12 +44,7 @@ background { rgb <.5,.3,.3> }
 	angle 78
 	location DeskLocation
 	look_at DeskLookAt
-  focal_point <RoomWidth/2,WallHeight/2,RoomLength/2>
-  aperture 1.1     // 0.05 ~ 1.5 more = more blurring
-  blur_samples 100 // 4 ~ 100  more = higher quality; fewer = faster
-  confidence 0.9   // 0 ~ 1 how cose to the correct color, 0 ~ 1, default 0.9
-  variance 1/128   // 1/64 ~ 1/1024 ~ (default) smallest displayable color difference
-};
+ };
 #declare FromDoorCamera = camera {
 	location FromDoorLocation
 	look_at FromDoorLookAt
@@ -57,10 +54,10 @@ background { rgb <.5,.3,.3> }
 	location ChessLocation
 	look_at ChessLookAt
 };
-#declare BedroomCamera = camera {
+#declare BedCamera = camera {
 	ultra_wide_angle
-	location BedroomLocation
-	look_at BedroomLookAt
+	location BedLocation
+	look_at BedLookAt
 };
 #declare StudyCamera = camera {
 	angle 65
@@ -79,7 +76,7 @@ background { rgb <.5,.3,.3> }
 
 };
 
-camera {ChandelierCamera}
+camera {StudyCamera}
 
 
 
@@ -103,7 +100,7 @@ camera {ChandelierCamera}
 
 
 #declare BackPictures = union {
-	box { //Back Sky Photo
+	/*box { //Back Sky Photo
 	<RoomWidth*1.5,1.5*RoomLength+5*feet,RoomLength+7*feet>
 	<-RoomWidth*.5,5*feet,RoomLength+6.5*feet>
 	texture {
@@ -120,8 +117,26 @@ camera {ChandelierCamera}
 		}
 	}
 	translate <0,-WallHeight*2.125,0>
+	}*/
+	box { //Front Sky Photo
+	<RoomWidth*2,1.5*RoomLength+5*feet,-7*feet>
+	<-RoomWidth*2,5*feet,-6.5*feet>
+	texture {
+		pigment {
+			uv_mapping // makes UV mapped
+			image_map {
+				jpeg "FrontSky.jpg"
+			}
+			//scale x*
+			scale <.6,.5,.6>//don't want to scale by much if you're UV mapping
+		}
+		finish {
+			emission .6
+		}
 	}
-	/*box { //Back Yard Photo
+	translate <0,-RoundRadius*.25,0>
+	}
+	box { //Back Yard Photo
 	<0,0,RoomLength+5*feet>
 	<RoomWidth,WallHeight*1.5,RoomLength+5.5*feet>
 	texture {
@@ -137,7 +152,7 @@ camera {ChandelierCamera}
 		}
 	}
 	translate <0,-.5*WallHeight,-4*feet>
-	}*/
+	}
 };
 
 //-------------------------------------------------------------------------------
@@ -149,7 +164,7 @@ camera {ChandelierCamera}
 
 global_settings {
 	radiosity {
-		Rad_Settings (Radiosity_Default, off, off ) //Type, using normal?, using media?
+		Rad_Settings (Radiosity_IndoorLQ, off, off ) //Type, using normal?, using media?
 		/*pretrace_start 0.08
 		pretrace_end 0.01 //smaller, the nicer it looks
 		count 500
@@ -172,7 +187,7 @@ global_settings {
 
 light_source { //Chandelier
 	<RoomWidth/2,WallHeight+RoundRadius-1.6,RoomLength-RoundRadius>
-	rgb <1,1,1> * 10
+	rgb <1,1,1> * 5 //10 for chandelier
 	spotlight
 	radius 90
 	falloff 90
@@ -188,7 +203,7 @@ light_source { //Light from cylinder chandelier light bulb
 
 
 light_source {//Bank Lamp Light
-	<RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet,RoomLength-RoundRadius>
+	<RoomWidth/2-1.5*feet,1.5*feet+4*feet,RoomLength-RoundRadius>
 	color rgb 1 * .2
 }
 
@@ -199,34 +214,34 @@ light_source {//Bank Lamp Light
 
 light_source {//Sun
 	<RoomWidth*3/4, WallHeight*3.5, RoomLength*2>
-	color rgb <.5,.3,.3> * 2 //for sunset, most cameras
-	//color rgb <.5,.3,.3> * 3 //for sunset, study camera, chess camera
+	//color rgb <.5,.3,.3> * 2 //for sunset, most cameras
+	color rgb <.5,.3,.3> * 3 //for sunset, study camera, chess camera
 	parallel
 	projected_through {BackPictures}
 }
 
-light_source {//StainGlassLightSource
+/*light_source {//StainGlassLightSource
 	<-RoomWidth*2, WallHeight/2, RoomLength/2>
 	color rgb <.5,.3,.3> * .5 //for sunset
 	parallel
 	point_at <RoomWidth/2,1.5*feet,RoomLength/2>
 	projected_through {BackPictures}
-}
+}*/
 
-/*light_source { //Front Window Light, only on with large and chess cameras
-	<RoomWidth*1/4, WallHeight*3.5, -RoomLength*2>
-	color rgb <.5,.3,.3> * .75 //for sunset
+light_source { //Front Window Light, only on with large and chess cameras
+	<RoomWidth*.25, WallHeight*3.5, -RoomLength*4>
+	color rgb <.5,.3,.5> * .01 //for sunset
 	parallel
 	point_at <RoomWidth/2,1.5*feet,RoomLength/2>
-	//projected_through {BackPictures}
-}*/
+	projected_through {BackPictures}
+}
 
 //-------------------------------------------------------------------------------
 //Objects
 //-------------------------------------------------------------------------------
 
 object { RoomArchitecture }
-/*object {
+object {
 	BasicDesk
 	rotate y*180
 	translate <RoomWidth/2,1.5*feet,RoomLength-RoundRadius>
@@ -235,19 +250,20 @@ object {
 	DeskFlower
 	translate <RoomWidth/4,Shelf_ShelvesBottomHeight+BowlRadius, RoomLength-RoundRadius*.5>
 }
-object {
+/*object {
 	ChessSet
 	translate <RoomWidth/4,1.5*feet+TableHeight+1,RoomLength/2>
 }*/
 object { BackPictures }
-/*object { Shelf rotate y*(-55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
+object { Shelf rotate y*(-55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
 object { Shelf rotate y*(55) translate <RoundRadius,0,CenterFloorLength+RoundRadius>}
-object { ChessTable rotate y*45 translate <RoomWidth/4,1.5*feet-1,RoomLength/2> }
+/*object { ChessTable rotate y*45 translate <RoomWidth/4,1.5*feet-1,RoomLength/2> }
 object { Chair rotate y*90 translate <RoomWidth/4-6,1.5*feet,RoomLength/2-RoomWidth/10>}
-object { Chair rotate y*-90 translate <RoomWidth/16*5-6,1.5*feet,RoomLength/2+ RoomWidth/10>}
-//object { Lamp_Shade translate <RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet-Lamp_ShadeRadius,RoomLength-RoundRadius>}
-//chair in study*/
-object { Chandelier scale 2 translate <RoomWidth/2, WallHeight+RoundRadius, RoomLength-RoundRadius-2*feet >}
+object { Chair rotate y*-90 translate <RoomWidth/16*5-6,1.5*feet,RoomLength/2+ RoomWidth/10>}*/
+object { Lamp_Shade rotate y*90 translate <RoomWidth/2-1.5*feet,1.5*feet+TableHeight+1*feet-Lamp_ShadeRadius,RoomLength-RoundRadius>}
+//chair in study
+object { Chair rotate y*-90 translate <RoomWidth/2+.75*feet,1.5*feet,RoomLength-RoundRadius+2*feet>}
+//object { Chandelier scale 2 translate <RoomWidth/2, WallHeight+RoundRadius, RoomLength-RoundRadius-2*feet >}
 cylinder {
 	<RoomWidth/2, WallHeight+RoundRadius, RoomLength-RoundRadius-2*feet >
 	<RoomWidth/2, WallHeight+RoundRadius-1.5, RoomLength-RoundRadius-2*feet >
@@ -255,6 +271,16 @@ cylinder {
 	texture {	WhiteGlassTexture }
 	interior {ior 1.5 }
 }
+/*object {
+	Bed
+	rotate y*180
+	translate <RoomWidth/2,WallHeight-1*feet,RoomLength-RoundRadius >
+}*/
+/*object {
+	Cup
+	scale .8
+	translate <RoomWidth/4+3.1*feet,WallHeight-2, RoomLength-RoundRadius*1.35>
+}*/
 
 
 //Basic Room needs window cutouts, windows and stainglass windows, chain, columns, iron railings, and Ladder

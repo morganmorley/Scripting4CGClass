@@ -1,4 +1,5 @@
 #include "BasicMeasurements.inc"
+#include "Textures.inc"
 
 //Draft HalfMoonLamp Curves
 
@@ -86,9 +87,9 @@
 };
 
 #declare Shelf = union {
-	object { Shelf_Wedge texture { pigment { rgb <1,1,1>}}}
-	object { Shelf_CabinetDoors texture { pigment { rgb <1,1,0>}}}
-	object { Shelf_CabinetDoors rotate y*22.5 translate <-3,0,-3>texture { pigment { rgb <1,0,1>}}}
+	object { Shelf_Wedge texture { DarkWoodTexture}}
+	object { Shelf_CabinetDoors texture { pigment { Wood_GradientPigment4}}}
+	object { Shelf_CabinetDoors rotate y*22.5 translate <-3,0,-3>texture { pigment { Wood_GradientPigment2}}}
 	rotate y*(45+22.5)
 };
 

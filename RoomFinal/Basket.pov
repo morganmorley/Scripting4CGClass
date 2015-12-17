@@ -148,7 +148,7 @@ light_source {
 		object {
 			Fence_OneChain
 			translate <0,0,-RoundRadius>
-			rotate  x*
+			rotate  x*0
 			translate <Width,Height,0>
 		}
 		#declare Height = Height + (Fence_LengthOfSegment*1.65)*sqrt(3);

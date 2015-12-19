@@ -5,6 +5,9 @@
 // Glass Objects
 //-------------------------------------------------------------------------------
 
+//==================================================
+//Hexagon Prism
+
 #declare CrystalWidthMedium = .35;
 #declare QuarterHexagonPrismHeight = .5;
 #declare HalfHexagonPrismHeight = 2* QuarterHexagonPrismHeight;
@@ -24,6 +27,9 @@
 	<0,-(QuarterHexagonPrismHeight + QuarterHexagonPrismHeight)>
 	rotate x*90
 };
+
+//==================================================
+//TearDrop
 
 #declare TearDropTopPoint = <0,(QuarterHexagonPrismHeight + QuarterHexagonPrismHeight)*2,0>;
 #declare TearDropZMidpoint = <0, QuarterHexagonPrismHeight + QuarterHexagonPrismHeight,-CrystalWidthMedium/2>;
@@ -68,6 +74,9 @@
 	translate <0,-QuarterHexagonPrismHeight,0>
 	scale (2/3)
 };
+
+//==================================================
+//Diamond
 
 #declare DiamondTopPoint = <0, HalfHexagonPrismHeight,0>;
 #declare DiamondBottomPoint = <0,-HalfHexagonPrismHeight,0>;
@@ -118,6 +127,9 @@
 			DiamondTopPoint
 		}
 };
+
+//==================================================
+//I think this is actually an octagon, but I call it a Decagon?
 
 #declare DecagonRadius = 2;
 #declare DecagonSide = DecagonRadius/sqrt(2);
@@ -215,7 +227,8 @@
 	#end
 };
 
-//Strand1 
+//==================================================
+//Strand1
 #declare Strand1Blue = union {
 	#declare StrandLength = 0;
 		object {
@@ -402,6 +415,7 @@
 	}
 };
 
+//==================================================
 //Strand2
 
 #declare Strand2Blue = union {
@@ -686,7 +700,8 @@
 	}
 };
 
-//TopChains
+//==================================================
+//Levels of Strands
 
 #declare ShortLevel3 = union {
 	#declare Index = 0;

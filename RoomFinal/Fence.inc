@@ -1,7 +1,7 @@
-
 #include "BasicMeasurements.inc"
 #include "Textures.inc"
 
+//This is what I call the honey-comb metal pattern on the headboard.
 
 #declare Fence_LengthOfSide = 2;
 #declare Fence_LengthOfSegment = (2/3) * Fence_LengthOfSide;

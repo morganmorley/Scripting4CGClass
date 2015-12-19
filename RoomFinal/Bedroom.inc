@@ -26,13 +26,13 @@
 	Round_Box(<-36,-2.25,BedLength/4-6>, <36,2.25,BedLength/4+2>, 2, true)
 	texture { pigment { BedSpread_DarkPigment }
 		normal {
-		uv_mapping // makes UV mapped
+		uv_mapping
 		bump_map {
 			jpeg "FabricNormal.jpg"
 			bump_size .5
 		}
 		rotate x*-12.5
-		scale .7 //don't want to scale by much1.5 you're UV mapping
+		scale .7 
 	}}
 	scale <0,2,0>
 };
@@ -62,7 +62,6 @@
 		}
 		scale <1.1,1,1.1>
 		translate <0,1,-3.5>
-		//texture { IronTexture1 }
 		texture { IronTexture2 }
 	}
 	difference {
@@ -89,7 +88,7 @@
 		}
 		texture { DarkWoodTexture }
 	}
-	/*difference {
+	/*difference { //In final render. Comment out in other renders. It makes everything super slow.
 		object { 
 			Fence 
 			translate <30,15,BedLength*1.0925> 

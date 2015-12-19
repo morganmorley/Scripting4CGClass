@@ -1,5 +1,4 @@
 //Basic Architecture
-//ÑÑ to November 30, 2015
 
 #include "StainGlassCutouts.inc"
 #include "BasicMeasurements.inc"
@@ -169,12 +168,12 @@
 			specular 0.6
 			roughness 0.005
 			reflection {
-				0.1, 1.0 //minimum and maximum amount of reflectivity on object
+				0.1, 1.0 
 				fresnel on		}
 			conserve_energy
 		}
 	}
-	interior {//tells pov-ray what to do with interior of object
+	interior {
 		ior 1.5 //glass
 	}
 };

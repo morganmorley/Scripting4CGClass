@@ -1,9 +1,12 @@
 #include "BasicMeasurements.inc"
 #include "Textures.inc"
 
+//Bank Lamp on desk in Study.
+
 #declare Lamp_ShadeCylinderWidth = 11;
 #declare Lamp_ShadeRadius = 2.5;
 
+//Before difference to make it a hollow shade:
 #declare Lamp_SolidShade = 	merge {
 	cylinder{
 		<-Lamp_ShadeCylinderWidth/2,0,0>
@@ -20,7 +23,7 @@
 	}
 };
 
-#declare Lamp_Shade = 	difference {
+#declare Lamp_Shade = difference {
 	object {
 		Lamp_SolidShade
 	}
@@ -34,7 +37,10 @@
 	}
 	scale y*2
 	scale z*1.5
-	texture {	GreenGlassTexture } interior { ior 1.5 }
+	rotate y*90
+	translate <.7*feet,.51*feet,0>
+	texture {	GreenGlassTexture }
+	interior { ior 1.5 }
 };
 
 #declare Lamp_HolderSquareHeightWidth = .75;
@@ -104,29 +110,79 @@
 		<Lamp_HolderSquareHeightWidth/2+3,Lamp_HolderSquareHeightWidth/2,Lamp_HolderTotalLength>
 		.1
 	}
-	//Lightbulb
 	translate <-Lamp_HolderTotalWidth/2,Lamp_ShadeRadius,-Lamp_HolderTotalLength>
+	rotate y*90
+	translate <.7*feet,.51*feet,0>
 	texture { SilverTexture }
 };
 
 #declare Lamp_StandTotalHeight = (2.5*2)*2.5;
+#declare Lamp_StandWidth = Lamp_StandTotalHeight/2;
 
-/*#declare Lamp_Stand = union {
-	box{
-	}
-	difference {// 90 degree corner
-	}
-	box{
-	}
-	difference { // 45 degree corner
-	}
-	box{
-	}
-};*/
 
-//base and cylinder
-//legs
-
+#declare Lamp_Stand = union {
+	difference {
+	difference {
+		object {
+			Round_Box (<-Lamp_StandWidth/2,-Lamp_StandWidth/2,-Lamp_HolderSquareHeightWidth>,<Lamp_StandWidth/2,Lamp_StandWidth/2,Lamp_HolderSquareHeightWidth>,Lamp_HolderSquareHeightWidth/2,true)
+		}
+		object {
+			Round_Box (<-Lamp_StandWidth/2+Lamp_HolderSquareHeightWidth,-Lamp_StandWidth/2+Lamp_HolderSquareHeightWidth,-Lamp_HolderSquareHeightWidth>,<Lamp_StandWidth/2-Lamp_HolderSquareHeightWidth,Lamp_StandWidth/2-Lamp_HolderSquareHeightWidth,Lamp_HolderSquareHeightWidth>,Lamp_HolderSquareHeightWidth/2,true)
+		}
+		box {
+			<-Lamp_StandWidth,-Lamp_StandWidth,Lamp_HolderSquareHeightWidth/2>
+			<Lamp_StandWidth,Lamp_StandWidth,Lamp_HolderSquareHeightWidth*2>
+		}
+		box {
+			<-Lamp_StandWidth,-Lamp_StandWidth,-Lamp_HolderSquareHeightWidth/2>
+			<Lamp_StandWidth,Lamp_StandWidth,-Lamp_HolderSquareHeightWidth*2>
+		}
+		box {
+			<-Lamp_StandWidth/2,-Lamp_StandWidth*1.5,-Lamp_HolderSquareHeightWidth>
+			<Lamp_StandWidth/2,Lamp_StandWidth*1.5,Lamp_HolderSquareHeightWidth>
+			rotate z*-45
+			translate <Lamp_StandWidth*.75,0,0>
+		}
+		box {
+			<-Lamp_HolderSquareHeightWidth/2,-Lamp_HolderSquareHeightWidth*2,-Lamp_HolderSquareHeightWidth>
+			<Lamp_HolderSquareHeightWidth,Lamp_HolderSquareHeightWidth,Lamp_HolderSquareHeightWidth>
+			translate <Lamp_StandWidth/2-Lamp_HolderSquareHeightWidth,Lamp_StandWidth/2,0>
+		}
+		translate <Lamp_StandWidth/2-Lamp_HolderSquareHeightWidth/2,Lamp_StandWidth,0>
+	}
+	box {
+		<-Lamp_HolderSquareHeightWidth/2,-sqrt(pow(Lamp_StandWidth,2)+pow(Lamp_StandWidth,2))/4,-Lamp_HolderSquareHeightWidth>
+		<Lamp_HolderSquareHeightWidth/2,sqrt(pow(Lamp_StandWidth,2)+pow(Lamp_StandWidth,2))/4,Lamp_HolderSquareHeightWidth>
+		rotate z*45
+		translate <Lamp_StandWidth/12,Lamp_HolderSquareHeightWidth+Lamp_StandWidth/4,0>
+	}
+	box {
+		<-Lamp_HolderSquareHeightWidth/2,-sqrt(pow(Lamp_StandWidth,2)+pow(Lamp_StandWidth,2))/4,-Lamp_HolderSquareHeightWidth>
+		<Lamp_HolderSquareHeightWidth/2,sqrt(pow(Lamp_StandWidth,2)+pow(Lamp_StandWidth,2))/4,Lamp_HolderSquareHeightWidth>
+		rotate z*45
+		translate <(Lamp_StandWidth/4)*1.15,Lamp_HolderSquareHeightWidth+Lamp_StandWidth/4,0>
+	}
+	translate <-Lamp_StandWidth/4,0,0>
+	}
+	box {
+		<-Lamp_HolderSquareHeightWidth/2,-sqrt(pow(Lamp_StandWidth,2)+pow(Lamp_StandWidth,2))/4,-Lamp_HolderSquareHeightWidth/2>
+		<Lamp_HolderSquareHeightWidth/2,sqrt(pow(Lamp_StandWidth,2)+pow(Lamp_StandWidth,2))/4,Lamp_HolderSquareHeightWidth/2>
+		rotate z*45
+		translate <0,Lamp_HolderSquareHeightWidth+Lamp_StandWidth/4,0>
+	}
+	cylinder {
+		<0,-Lamp_HolderSquareHeightWidth*1.25,0>
+		<0,Lamp_HolderSquareHeightWidth/2,0>
+		Lamp_HolderSquareHeightWidth*.75
+		rotate z*45
+		translate <Lamp_StandWidth/4,Lamp_HolderSquareHeightWidth,0>
+	}
+	box {
+		<-Lamp_StandWidth/4,-Lamp_HolderSquareHeightWidth/2,-Lamp_StandWidth>
+		<Lamp_StandWidth*.75, Lamp_HolderSquareHeightWidth/2,Lamp_StandWidth>
+	}
+	texture { SilverTexture }
+};
 
 
 

@@ -7,13 +7,13 @@
 #declare TotalRadius = .75 * feet;
 #declare Scaler = 1/8 * TotalRadius;
 
-//Carrot
+//Carrots
 #declare CarrotLength = 5 * Scaler;
 #declare SixthCarrotLength = CarrotLength/6;
 #declare CarrotWidth = (CarrotLength/3)*1.2;
 #declare HalfCarrotWidth = CarrotWidth/2;
 
-//Z-Values
+//Z-Values Carrots
 #declare Z1 = 2 * Scaler;
 #declare Z2 = Z1 + (5 * SixthCarrotLength);
 
@@ -31,7 +31,6 @@
 };
 
 //CarrotHeads
-
 #declare HeadHeight = 1.35 * Scaler;
 #declare HeadRadius = HeadHeight/2;
 #declare CenterHeight = Z2+(HeadHeight*(2/3));
@@ -56,13 +55,14 @@
 };
 
 //Edges Linear Splines
-
 #declare EdgeHeight = 1 * Scaler;
 
+//Z-Values Edges
 #declare Z5 = Z2+(.6*Scaler);
 #declare Z3 = Z5+(.3*Scaler);
 #declare Z4 = Z5+(EdgeHeight);
 
+//X-Values Edges
 #declare X2 = (.4*Scaler);
 #declare X3 = (.4*Scaler)+X2;
 #declare X4 = -(.4*Scaler);
@@ -84,8 +84,7 @@
 };
 
 
-//Union Carrots, carrot heads, edges -> rotate in for loop
-
+//Union Carrots, carrot heads, edges -> rotate in for loop for whole "flower" shape
 #declare OnePetal = union {
 		object {
 			Carrot
@@ -123,9 +122,9 @@
 
 #declare FlowerCenter = prism {
     cubic_spline
-    -WallWidth*2, // Y min
-    WallWidth*2, // Y max CHANGE
-    4 * NumSlices + 3, // the number of points making up the shape ...
+    -WallWidth*2,
+    WallWidth*2,
+    4 * NumSlices + 3, 
     		#declare Degrees = 0;
 		#while (Degrees < 360)
 			<RotateX(FlowerRadius,Degrees), RotateY(FlowerRadius,Degrees)>
@@ -140,7 +139,7 @@
 		<RotateX(LittleRadius,Degrees + SliceAngle/2), RotateY(LittleRadius,Degrees + SliceAngle/2)>
 };
 
-//Stain Glass window
+//Stain Glass window cutout for wall in RoomArchitecture
 
 #declare OneStainGlassCutout = union {
 	object {

@@ -1,6 +1,8 @@
 #include "BasicMeasurements.inc"
 #include "Textures.inc"
 
+//Creates the chairs in the Study and around the Chess Table
+
 #declare Chair_TotalHeight = 3.25*feet;
 #declare Chair_TotalWidth = 1.5*feet;
 #declare Chair_TriangleHeight = 1.5*feet;
@@ -20,7 +22,7 @@
 #declare Chair_BoxWidth = 1.6*feet;
 #declare Chair_SeatBox = box {
 	<-1.5,-1,Chair_TotalWidth-1.5>
-	<Chair_BoxWidth,1,0+1.5>
+	<Chair_BoxWidth,1,1.5>
 	rotate z*-5
 	translate <-.75*feet,Chair_TotalHeight-1.75*feet,0>
 }; 

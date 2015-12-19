@@ -1,7 +1,7 @@
 #include "BasicMeasurements.inc"
 #include "Colors.inc"
 
-
+//Most (should be all, but who knows…) textures used in the room
 
 //-------------------------------------------------------------------------------
 //Water
@@ -16,8 +16,6 @@
 		ambient 0
 		specular 0.6
 		roughness 0.005
-		//reflection {0.5}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
 		reflection {
 			0.1, 1.0 //minimum and maximum amount of reflectivity on object
 			fresnel on		}
@@ -39,10 +37,6 @@
 		specular 1
 		roughness .05
 		reflection {0.3}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
-		//reflection {
-			//0.1, 5.0 //minimum and maximum amount of reflectivity on object
-			//fresnel on		}
 		conserve_energy
 	}
 };
@@ -56,10 +50,6 @@
 		specular .8
 		roughness .05
 		reflection {0.3}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
-		//reflection {
-			//0.1, 5.0 //minimum and maximum amount of reflectivity on object
-			//fresnel on		}
 		conserve_energy
 	}
 };
@@ -77,6 +67,7 @@
     [1.0 rgb <0.6, 0.6, 0.5>]
 };
 
+//This is not actually iron, but rather a marble in the colors of aged iron. I couldn't make a successful iron texture.
 #declare Iron_Pigment2 = pigment {
     marble
     turbulence 1
@@ -106,16 +97,14 @@
 
 #declare ClearGlassTexture = texture {
 	pigment {
-		color rgbt <1,1,1,.95>
+		color rgbt <1,1,1,1>
 	}
 	finish {
 		ambient 0
 		specular 0.6
 		roughness 0.005
-		//reflection {0.5}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
 		reflection {
-			0.1, 1.0 //minimum and maximum amount of reflectivity on object
+			0.1, 1.0 
 			fresnel on		}
 		conserve_energy
 	}
@@ -126,14 +115,11 @@
 		color rgbt <1,1,1,.05>
 	}
 	finish {
-		emission .75
 		ambient 0
 		specular 0.6
 		roughness 0.005
-		//reflection {0.5}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
 		reflection {
-			0.1, 1.0 //minimum and maximum amount of reflectivity on object
+			0.1, 1.0 
 			fresnel on		}
 		conserve_energy
 	}
@@ -147,10 +133,8 @@
 		ambient 0
 		specular 0.6
 		roughness 0.005
-		//reflection {0.5}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
 		reflection {
-			0.1, 1.0 //minimum and maximum amount of reflectivity on object
+			0.1, 1.0 
 			fresnel on		}
 		conserve_energy
 	}
@@ -164,10 +148,8 @@
 		ambient 0
 		specular 0.6
 		roughness 0.005
-		//reflection {0.5}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
 		reflection {
-			0.1, 1.0 //minimum and maximum amount of reflectivity on object
+			0.1, 1.0 
 			fresnel on		}
 		conserve_energy
 	}
@@ -181,10 +163,8 @@
 		ambient 0
 		specular 0.6
 		roughness 0.005
-		//reflection {0.5}
-		//an object is less reflective at normal to camera (straight at it) than at a glancing angle (normal and camera perpendicular)
 		reflection {
-			0.1, 1.0 //minimum and maximum amount of reflectivity on object
+			0.1, 1.0 
 			fresnel on		}
 		conserve_energy
 	}
@@ -202,7 +182,7 @@
 };
 #declare StainGlass_Texture1 = texture {
 	pigment {
-		agate //makes concentric circles
+		agate 
 		agate_turb 1
 		color_map {StainGlass_ColorMap1}
 		scale 1
@@ -218,7 +198,7 @@
 };
 #declare StainGlass_Texture2 = texture {
 	pigment {
-		agate //makes concentric circles
+		agate 
 		agate_turb 1
 		color_map {StainGlass_ColorMap2}
 		scale 1
@@ -235,7 +215,7 @@
 };
 #declare StainGlass_Texture3 = texture {
 	pigment {
-		agate //makes concentric circles
+		agate
 		agate_turb 1
 		color_map {StainGlass_ColorMap3}
 		scale 1
@@ -248,34 +228,30 @@
 //-------------------------------------------------------------------------------
 
 #declare DarkWoodPigment = pigment {
-	uv_mapping // makes UV mapped
+	uv_mapping 
 	image_map {
 		jpeg "DarkWood.jpg"
 	}
-	scale .4 //don't want to scale by much if you're UV mapping
+	scale .4 
 };
+
 #declare DarkWoodTexture = texture {
-	pigment {
-			uv_mapping // makes UV mapped
-			image_map {
-				jpeg "DarkWood.jpg"
-			}
-			scale .4 //don't want to scale by much if you're UV mapping
-		}
-		finish {
-			specular 0.4
-			roughness 0.005
-			reflection .005
-		}
+	pigment { DarkWoodPigment }
+	finish {
+		specular 0.4
+		roughness 0.005
+		reflection .005
+	}
 };
 
 #declare LightWoodPigment = pigment {
-	uv_mapping // makes UV mapped
+	uv_mapping 
 	image_map {
 		jpeg "LightWood.jpg"
 	}
-	scale .4 //don't want to scale by much if you're UV mapping
+	scale .4 
 };
+
 #declare LightWoodTexture = texture {
 	pigment { LightWoodPigment }
 		finish {
@@ -298,35 +274,33 @@
 };
 
 #declare Wood_GradientPigment1 = pigment {
-	gradient <0,0,-1>//default color map idea - value is direction it goes in
-	//color_map {ColorMap} //could be color or pigment maps
+	gradient <0,0,-1>
 	pigment_map {WoodPigmentMap}
-	scale 20*feet  //by default, gradient repeats every one unit
-	translate <0,0,0> //gets gradient to fit the sphere radius
+	scale 10*feet 
 	turbulence 3
 };
+
 #declare Wood_GradientPigment2 = pigment {
-	gradient <0,0,-1>//default color map idea - value is direction it goes in
-	//color_map {ColorMap} //could be color or pigment maps
+	gradient <0,0,-1>
 	pigment_map {WoodPigmentMap}
-	scale 20*feet  //by default, gradient repeats every one unit
-	translate <3*feet,4*feet,0> //gets gradient to fit the sphere radius
+	scale 10*feet  
+	translate <3*feet,4*feet,0>
 	turbulence 3
 };
+
 #declare Wood_GradientPigment3 = pigment {
-	gradient <0,0,-1>//default color map idea - value is direction it goes in
-	//color_map {ColorMap} //could be color or pigment maps
+	gradient <0,0,-1>
 	pigment_map {WoodPigmentMap}
-	scale 20*feet  //by default, gradient repeats every one unit
-	translate <-5*feet,-5*feet,0> //gets gradient to fit the sphere radius
+	scale 10*feet
+	translate <-5*feet,-5*feet,0> 
 	turbulence 3
 };
+
 #declare Wood_GradientPigment4 = pigment {
-	gradient <0,0,-1>//default color map idea - value is direction it goes in
-	//color_map {ColorMap} //could be color or pigment maps
+	gradient <0,0,-1>
 	pigment_map {WoodPigmentMap}
-	scale 20*feet  //by default, gradient repeats every one unit
-	translate <8*feet,10*feet,0> //gets gradient to fit the sphere radius
+	scale 10*feet
+	translate <8*feet,10*feet,0> 
 	turbulence 3
 };
 
@@ -336,11 +310,11 @@
 
 #declare BlackLeatherTexture = texture {
 	pigment {
-			uv_mapping // makes UV mapped
+			uv_mapping 
 			image_map {
 				jpeg "BlackLeather.jpg"
 			}
-			scale .5 //don't want to scale by much if you're UV mapping
+			scale .5 
 		}
 		finish {
 			specular 0.6
@@ -354,6 +328,22 @@
 //Objects
 //-------------------------------------------------------------------------------
 
+#declare LightBasketTexture = texture {
+	pigment {
+		uv_mapping 
+		image_map {
+			jpeg "LightBasketTexture.jpg"
+		}
+		scale 1 
+	}
+	finish {
+		specular 0.4
+		roughness 0.005
+		reflection .005
+	}
+};
+
+
 //==================================================
 //Platform 
 
@@ -366,14 +356,12 @@
 };
 
 #declare Platform_Finish = finish {
-	specular 0.1 //Max highlight intensity: 0 -> 1
-      roughness 0.5 //surface roughness: 0.0005 -> 1             
+	specular 0.1 
+      roughness 0.5             
 };
 
 #declare Platform_Texture = texture {
-	pigment { /*uv_mapping*/ Platform_MappedPigment 
-
-	}
+	pigment { Platform_MappedPigment }
 	finish { Platform_Finish }
 };
 
@@ -399,30 +387,28 @@
 };
 
 #declare BedSpread_GradientPigment = pigment {
-	gradient <0,0,-1>//default color map idea - value is direction it goes in
-	//color_map {ColorMap} //could be color or pigment maps
+	gradient <0,0,-1>
 	pigment_map {BedSpread_MappedPigment}
-	scale 6*feet  //by default, gradient repeats every one unit
-	translate <2*feet,0,3*feet> //gets gradient to fit the sphere radius
-	//turbulence .5
+	scale 6*feet 
+	translate <2*feet,0,3*feet> 
 };
 
 
 #declare BedSpread_Finish = finish {
-	specular 0.05 //Max highlight intensity: 0 -> 1
-      roughness 0.5 //surface roughness: 0.0005 -> 1             
+	specular 0.05 
+  roughness 0.5            
 };
 
 #declare BedSpread_Texture = texture {
-	pigment { /*uv_mapping*/ BedSpread_GradientPigment}
+	pigment { BedSpread_GradientPigment}
 	normal {
-		uv_mapping // makes UV mapped
-		bump_map {
+		uv_mapping 
+			bump_map {
 			jpeg "FabricNormal.jpg"
 			bump_size .5
 		}
 		rotate x*-12.5
-		scale .3 //don't want to scale by much if you're UV mapping
+		scale .3 
 	}
 	finish { BedSpread_Finish }
 };
@@ -448,33 +434,71 @@
 };
 
 #declare Pillow_GradientPigment = pigment {
-	gradient <0,0,-.1>//default color map idea - value is direction it goes in
-	//color_map {ColorMap} //could be color or pigment maps
+	gradient <0,0,-.1>
 	pigment_map {Pillow_MappedPigment}
-	scale .75*feet  //by default, gradient repeats every one unit
-	translate <0*feet,.6,.45*feet> //gets gradient to fit the sphere radius
-	//turbulence .5
+	scale .75*feet 
+	translate <0*feet,.6,.45*feet> 
 };
 
 
 #declare Pillow_Finish = finish {
-	specular 0.05 //Max highlight intensity: 0 -> 1
-      roughness 0.5 //surface roughness: 0.0005 -> 1             
+	specular 0.05 
+      roughness 0.5          
 };
 
 
 #declare Pillow_Texture = texture {
 	pigment { Pillow_GradientPigment }
 	normal {
-		uv_mapping // makes UV mapped
-		bump_map {
+		uv_mapping 
+			bump_map {
 			jpeg "FabricNormal.jpg"
 			bump_size .5
 		}
 		rotate x*-12.5
-		scale .7 //don't want to scale by much if you're UV mapping
+		scale .7 
 	}
 	finish { Pillow_Finish }
+};
+
+
+//==================================================
+//Books
+
+#declare Book1Texture = texture {
+	pigment {
+		uv_mapping 
+		image_map {
+			jpeg "Book1.jpg"
+		}
+	scale <1,.4,1> 
+		rotate z*90
+		translate <.29,-.01,0>
+	}
+};
+
+#declare Book2Texture = texture {
+	pigment {
+		uv_mapping 
+		image_map {
+			jpeg "Book2.jpg"
+		}
+		scale <1,.25,1>
+		rotate z*90
+		translate <-.9999999,0,0>
+	}
+};
+
+#declare Book3Texture = texture {
+	pigment {
+		uv_mapping 
+		image_map {
+			jpeg "Book3.jpg"
+		}
+		scale <2,.5,0> 
+		rotate z*90
+		translate <.01,-.12,0>
+	}
 };
 
 //==================================================
